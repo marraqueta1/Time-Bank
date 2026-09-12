@@ -26,7 +26,7 @@ Requerimientos No Funcionales:
 
 RNF-01 (Rendimiento): El sistema responderá a las consultas de transacciones de la billetera de tiempo en un tiempo máximo de 2 segundos.
 
-RNF-02 (Seguridad): Los datos de sesión y las interacciones deben almacenarse de forma segura  y no accesible por terceros. La comunicación se hará mediante HTTPS. 
+RNF-02 (Seguridad): El sistema protegerá la manipulación de saldos y endpoints privados utilizando el estándar de autenticación por tokens JWT (JSON Web Tokens).
 
 RNF-03 (Usabilidad): Interfaz mobile-first con tabs inferiores en móvil y menú lateral en web utilizando los componentes del framework Ionic con React.
 
