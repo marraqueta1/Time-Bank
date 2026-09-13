@@ -54,22 +54,22 @@ Falta de incentivos para enseñar: Muchos estudiantes y profesores desean compar
 ### Caracterización General de Usuarios Objetivo
 
 #### Definición y Características
-Adultos y estudiantes que buscan optimizar sus recursos intercambiando habilidades en lugar de dinero.
+- Adultos y estudiantes que buscan optimizar sus recursos intercambiando habilidades en lugar de dinero.
 
 ### Contexto de Uso y Dispositivos
-Entornos móviles y dinámicos (transporte público, campus universitario, hogar). Acceso mediante smartphones o computadores con conexión a internet.
+- Entornos móviles y dinámicos (transporte público, campus universitario, hogar). Acceso mediante smartphones o computadores con conexión a internet.
 
 ### Nivel de Experiencia Tecnológica
-Medio-alto. Están habituados al uso de aplicaciones de entrega rápida y transporte compartido, por lo que esperan interfaces intuitivas y de respuesta inmediata.
+- Medio-alto. Están habituados al uso de aplicaciones de entrega rápida y transporte compartido, por lo que esperan interfaces intuitivas y de respuesta inmediata.
 
 ### Necesidades de Privacidad y Seguridad
-Exigen protección de datos de contacto y geolocalización difuminada hasta que ambas partes acepten formalmente el intercambio.
+- Exigen protección de datos de contacto y geolocalización difuminada hasta que ambas partes acepten formalmente el intercambio.
 
 ### Roles Considerados
-Usuario y Administrador.
+- Usuario, Profesor y Administrador.
 
 ### Supuestos Utilizados
-La construcción de estos perfiles asume que los usuarios poseen al menos una habilidad transferible, tienen disposición temporal para concretar acuerdos presenciales o remotos, y confían en la validación mediante sistemas de reseñas.
+- La construcción de estos perfiles asume que los usuarios poseen al menos una habilidad transferible, tienen disposición temporal para concretar acuerdos presenciales o remotos, y confían en la validación mediante sistemas de reseñas.
 
 ## Proto-Personas
 
