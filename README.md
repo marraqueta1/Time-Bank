@@ -51,23 +51,29 @@ Falta de incentivos para enseñar: Muchos estudiantes y profesores desean compar
 
 
 
-Caracterización General de Usuarios Objetivo
+### Caracterización General de Usuarios Objetivo
 
-Definición y Características: Adultos y estudiantes que buscan optimizar sus recursos intercambiando habilidades en lugar de dinero.
+#### Definición y Características
+Adultos y estudiantes que buscan optimizar sus recursos intercambiando habilidades en lugar de dinero.
 
-Contexto de Uso y Dispositivos: Entornos móviles y dinámicos (transporte público, campus universitario, hogar). Acceso mediante smartphones o computadores con conexión a internet.
+### Contexto de Uso y Dispositivos
+Entornos móviles y dinámicos (transporte público, campus universitario, hogar). Acceso mediante smartphones o computadores con conexión a internet.
 
-Nivel de Experiencia Tecnológica: Medio-alto. Están habituados al uso de aplicaciones de entrega rápida y transporte compartido, por lo que esperan interfaces intuitivas y de respuesta inmediata.
+### Nivel de Experiencia Tecnológica
+Medio-alto. Están habituados al uso de aplicaciones de entrega rápida y transporte compartido, por lo que esperan interfaces intuitivas y de respuesta inmediata.
 
-Necesidades de Privacidad y Seguridad: Exigen protección de datos de contacto y geolocalización difuminada hasta que ambas partes acepten formalmente el intercambio.
+### Necesidades de Privacidad y Seguridad
+Exigen protección de datos de contacto y geolocalización difuminada hasta que ambas partes acepten formalmente el intercambio.
 
-Roles Considerados: Usuario y Administrador.
+### Roles Considerados
+Usuario y Administrador.
 
-Supuestos Utilizados
-
+### Supuestos Utilizados
 La construcción de estos perfiles asume que los usuarios poseen al menos una habilidad transferible, tienen disposición temporal para concretar acuerdos presenciales o remotos, y confían en la validación mediante sistemas de reseñas.
 
-Proto-Persona 1: 
+## Proto-Personas
+
+### Proto-Persona 1: 
 
 Rol: Usuario.
 
