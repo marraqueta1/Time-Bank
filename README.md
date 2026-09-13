@@ -4,11 +4,11 @@ EP 1.1:
 Roles: Usuario (Intercambiar tiempo entre ellos), Profesores(Pueden generar salas para enseñar) y Administrador (Moderador del Sistema).
 
 ## Requerimientos Funcionales:
--RF-01: El sistema permitirá al usuario gestionar sus ofertas de habilidades, incluyendo la creación, modificación y eliminación de los servicios que imparte.
+- RF-01: El sistema permitirá al usuario gestionar sus ofertas de habilidades, incluyendo la creación, modificación y eliminación de los servicios que imparte.
 
--RF-02: El sistema permitirá al usuario gestionar sus solicitudes de tiempo, publicando y editando las necesidades o tareas en las que requiere ayuda.
+- RF-02: El sistema permitirá al usuario gestionar sus solicitudes de tiempo, publicando y editando las necesidades o tareas en las que requiere ayuda.
 
--RF-03: El sistema permitirá al usuario gestionar las propuestas de trueque recibidas, teniendo la capacidad de aceptar, rechazar o cancelar un acuerdo de intercambio.
+- RF-03: El sistema permitirá al usuario gestionar las propuestas de trueque recibidas, teniendo la capacidad de aceptar, rechazar o cancelar un acuerdo de intercambio.
 
 -RF-04: El sistema permitirá al usuario gestionar su billetera de tiempo, visualizando el saldo actual y el historial detallado de horas ganadas y gastadas.
 
