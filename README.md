@@ -75,49 +75,49 @@ Falta de incentivos para enseñar: Muchos estudiantes y profesores desean compar
 
 ### Proto-Persona 1: 
 
-** Rol: Usuario. **
+- **Rol: Usuario.**
 
-Características Generales: Estudiante de ingeniería en informática, 22 años, se moviliza frecuentemente entre la universidad y su ciudad de origen.
+- Características Generales: Estudiante de ingeniería en informática, 22 años, se moviliza frecuentemente entre la universidad y su ciudad de origen.
 
-Necesidades y Objetivos: Requiere ayuda con el diseño gráfico de un proyecto. Ofrece a cambio horas de programación o reparación de computadores.
+- Necesidades y Objetivos: Requiere ayuda con el diseño gráfico de un proyecto. Ofrece a cambio horas de programación o reparación de computadores.
 
-Puntos de Frustración: Carencia de presupuesto para contratar freelancers y miedo a que la contraparte abandone el acuerdo a la mitad.
+- Puntos de Frustración: Carencia de presupuesto para contratar freelancers y miedo a que la contraparte abandone el acuerdo a la mitad.
 
-Funcionalidades a Utilizar: Sistema de "Escrow" (garantía de horas) y matchmaking por etiquetas.
+- Funcionalidades a Utilizar: Sistema de "Escrow" (garantía de horas) y matchmaking por etiquetas.
 
-Proto-Persona 2: 
+### Proto-Persona 2: 
 
-Rol: Usuario.
+- **Rol: Usuario.**
 
-Características Generales: Joven de 25 años en búsqueda activa de empleo (bodega o retail), con fuertes habilidades en mantenimiento del hogar y paisajismo.
+- Características Generales: Joven de 25 años en búsqueda activa de empleo (bodega o retail), con fuertes habilidades en mantenimiento del hogar y paisajismo.
 
-Necesidades y Objetivos: Necesita instalar un aire acondicionado portátil y reparar un electrodoméstico. Ofrece a cambio servicios de jardinería u orden de inventarios.
+- Necesidades y Objetivos: Necesita instalar un aire acondicionado portátil y reparar un electrodoméstico. Ofrece a cambio servicios de jardinería u orden de inventarios.
 
-Puntos de Frustración: Dificultad para encontrar asistencia técnica de confianza en su radio cercano sin gastar sus ahorros.
+- Puntos de Frustración: Dificultad para encontrar asistencia técnica de confianza en su radio cercano sin gastar sus ahorros.
 
-Funcionalidades a Utilizar: Geolocalización de ofertas cercanas y sistema de reseñas.
+- Funcionalidades a Utilizar: Geolocalización de ofertas cercanas y sistema de reseñas.
 
 
-Proto-Persona 3:
+### Proto-Persona 3:
 
-Rol: Profesor/Ayudante
+- **Rol: Profesor/Ayudante**
 
-Características: 25 años, egresado de Ingeniería Civil. Experto en Python.
+- Características: 25 años, egresado de Ingeniería Civil. Experto en Python.
 
-Necesidades: Enseñar de forma flexible y obtener beneficios tangibles (tiempo/puntos canjeables).
+- Necesidades: Enseñar de forma flexible y obtener beneficios tangibles (tiempo/puntos canjeables).
 
-Objetivos: Impartir tutorías individuales y "salas de ayudantía" grupales.
+- Objetivos: Impartir tutorías individuales y "salas de ayudantía" grupales.
 
-Puntos de Frustración: Pérdida de tiempo buscando alumnos y gestionando acuerdos o inasistencias.
+- Puntos de Frustración: Pérdida de tiempo buscando alumnos y gestionando acuerdos o inasistencias.
 
-Funcionalidades a utilizar:
+- Funcionalidades a utilizar:
 
-RF-01 y RF-05: Creación y gestión de sus ofertas de habilidades (tutorías y salas de ayudantía), definiendo título, categoría, duración y modalidad.
+- RF-01 y RF-05: Creación y gestión de sus ofertas de habilidades (tutorías y salas de ayudantía), definiendo título, categoría, duración y modalidad.
 
-RF-03: Gestión de las propuestas de trueque recibidas para aceptar, rechazar o cancelar la participación de los alumnos.
+- RF-03: Gestión de las propuestas de trueque recibidas para aceptar, rechazar o cancelar la participación de los alumnos.
 
-RF-04: Gestión de la billetera de tiempo para visualizar su saldo actual y el historial de horas ganadas impartiendo clases.
+- RF-04: Gestión de la billetera de tiempo para visualizar su saldo actual y el historial de horas ganadas impartiendo clases.
 
-RF-06: Gestión de calificaciones para evaluar a los alumnos y construir su propia reputación mediante reseñas.
+- RF-06: Gestión de calificaciones para evaluar a los alumnos y construir su propia reputación mediante reseñas.
 
-Dispositivo y Contexto: Laptop para uso web (aprovechando el menú lateral según el RNF-03) al planificar clases, y smartphone (interfaz mobile-first con tabs) para gestionar solicitudes sobre la marcha.
+- Dispositivo y Contexto: Laptop para uso web (aprovechando el menú lateral según el RNF-03) al planificar clases, y smartphone (interfaz mobile-first con tabs) para gestionar solicitudes sobre la marcha.
