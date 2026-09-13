@@ -75,7 +75,7 @@ Falta de incentivos para enseñar: Muchos estudiantes y profesores desean compar
 
 ### Proto-Persona 1: 
 
-Rol: Usuario.
+** Rol: Usuario. **
 
 Características Generales: Estudiante de ingeniería en informática, 22 años, se moviliza frecuentemente entre la universidad y su ciudad de origen.
 
