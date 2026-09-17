@@ -122,5 +122,5 @@ Falta de incentivos para enseñar: Muchos estudiantes y profesores desean compar
 
 - Dispositivo y Contexto: Laptop para uso web (aprovechando el menú lateral según el RNF-03) al planificar clases, y smartphone (interfaz mobile-first con tabs) para gestionar solicitudes sobre la marcha.
 
-##Bocetos UI/UX
+## Bocetos UI/UX
 [Figma - Prototipo de UI/UX](https://www.figma.com/design/wL91AmcXIUWYASwxa2QKNe/Diseño-UI-UX--Community-?node-id=0-1&p=f&t=wQqFvR5lZ5YBtsvj-0)
