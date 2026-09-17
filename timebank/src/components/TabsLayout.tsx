@@ -10,7 +10,6 @@ const TabsLayout: React.FC = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
-        {/* Aquí también cambiamos a element */}
         <Route path="/app/feed" element={<Feed />} />
         <Route path="/app/create" element={<CreateOffer />} />
         <Route path="/app/wallet" element={<Wallet />} />
