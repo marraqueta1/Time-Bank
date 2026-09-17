@@ -188,3 +188,81 @@ Aplicación
         ├── Estadísticas
         └── Configuración
 ```
+
+## (c) Flujo de navegación entre funcionalidades
+El ecosistema conecta el descubrimiento de habilidades con la negociación de forma circular. Un usuario explora ofertas en el Feed principal y selecciona una publicación para acceder a su detalle. Desde allí, utiliza la opción de enviar una propuesta, lo cual alimenta directamente la vista de Propuestas enviadas. Si la contraparte responde o acepta, el flujo permite saltar inmediatamente al Chat para afinar detalles en tiempo real antes de concretar el intercambio y liberar el saldo.
+
+## (d) Diferenciación de acceso según roles
+La aplicación deberá controlar el acceso a las diferentes funcionalidades de acuerdo con el rol del usuario autenticado. 
+
+Se consideran los siguientes roles principales:
+- **Usuario (Estudiante / Profesor)**
+- **Administrador**
+
+### Matriz de acceso por rol
+
+| Funcionalidad | Usuario | Administrador |
+|---|:---:|:---:|
+| Explorar ofertas y salas en el Feed | ✓ | — |
+| Visualizar detalle y reseñas de una oferta | ✓ | — |
+| Crear, modificar y eliminar publicaciones | ✓ | — |
+| Enviar, aceptar o rechazar propuestas | ✓ | — |
+| Utilizar el chat en tiempo real | ✓ | — |
+| Consultar y canjear saldo en Mi Wallet | ✓ | — |
+| Calificar a la contraparte finalizado el servicio | ✓ | — |
+| Gestionar usuarios (suspender o bloquear) | — | ✓ |
+| Resolver disputas y revisar reportes | — | ✓ |
+| Administrar el catálogo de categorías | — | ✓ |
+
+### Acceso del Usuario
+Tendrá acceso a todas las funcionalidades relacionadas con el mercado de intercambio. Podrá explorar el Feed, publicar sus conocimientos, proponer trueques, comunicarse vía chat y gestionar sus puntos. No podrá acceder a funciones de moderación del sistema.
+
+### Acceso del Administrador
+Será responsable de la moderación y estabilidad del sistema. Podrá consultar usuarios registrados, bloquear cuentas fraudulentas, revisar las disputas generadas en intercambios no concretados y administrar el catálogo global de habilidades. No participará en el mercado de trueques.
+
+### Control de acceso a rutas
+La diferenciación por roles deberá aplicarse en la protección de rutas:
+```
+/login
+/registro
+
+/app/feed
+/app/create
+/app/proposals
+/app/wallet
+
+/admin/dashboard
+/admin/usuarios
+```
+## (e) Flujos de Tareas
+Los flujos de tareas (*task flows*) representan la secuencia de acciones que realiza un usuario para completar una actividad específica.
+
+### Task Flow 1: Creación de una publicación
+
+**Rol:** Usuario (Estudiante / Profesor)
+**Objetivo:** Registrar y publicar una oferta de habilidad o una necesidad en el Feed.
+
+```
+Inicio de sesión
+      ↓
+Inicio (Feed principal)
+      ↓
+Seleccionar opción "Crear"
+      ↓
+Elegir tipo (Oferta / Sala / Busco)
+      ↓
+Ingresar detalles (Título, Descripción, Modalidad)
+      ↓
+Definir duración y Puntos a cobrar
+      ↓
+Seleccionar "Publicar"
+      ↓
+¿Datos válidos e incompletos?
+   ↓          ↓
+  No         Sí
+   ↓          ↓
+Mostrar    Registrar
+errores    publicación
+              ↓
+        Mostrar en el Feed
+```
