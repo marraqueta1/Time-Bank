@@ -242,7 +242,7 @@ Los flujos de tareas (*task flows*) representan la secuencia de acciones que rea
 **Rol:** Usuario (Estudiante / Profesor)
 **Objetivo:** Registrar y publicar una oferta de habilidad o una necesidad en el Feed.
 
-```
+```text
 Inicio de sesión
       ↓
 Inicio (Feed principal)
@@ -266,3 +266,52 @@ errores    publicación
               ↓
         Mostrar en el Feed
 ```
+### Task Flow 2: Proponer e iniciar un trueque
+**Rol:** Usuario (Estudiante / Profesor)
+**Objetivo:** Encontrar una oferta de interés, proponer un intercambio y acordar los detalles 
+
+```text 
+Explorar Feed principal
+      ↓
+Seleccionar una oferta de interés
+      ↓
+Visualizar detalles y reseñas previas
+      ↓
+Seleccionar "Enviar propuesta"
+      ↓
+Confirmar envío (El saldo queda en espera)
+      ↓
+Visualizar propuesta en "Enviadas"
+      ↓
+Contraparte acepta la solicitud
+      ↓
+Se habilita sala de Chat
+      ↓
+Acordar fecha/hora en tiempo real
+```
+## (f) Puntos críticos de interacción
+Los puntos críticos corresponden a acciones donde una interfaz poco clara puede afectar la experiencia o los fondos del usuario:
+
+1. **Aceptación de Propuestas:** Los botones de "Aceptar" o "Contraofertar" definen el estado de la transacción. Un error aquí compromete el tiempo/puntos del usuario, por lo que la interfaz debe exigir una confirmación clara.
+2. **Sistema de Escrow (Retención):** Cuando se acuerda un servicio, los puntos se retienen. El sistema debe mostrar claramente en la "Wallet" qué saldo está disponible y qué saldo está congelado en trueques pendientes.
+3. **Calificación Final:** Es el paso que libera los puntos retenidos hacia el proveedor. Debe ser de llenado rápido y obligatorio antes de permitir un nuevo trueque con esa persona.
+4. **Moderación Administrativa:** El botón de "Suspender usuario" en el panel de administrador revoca el acceso de forma inmediata. Debe contar con una validación secundaria para evitar bloqueos accidentales.
+
+## (g) Coherencia de experiencia entre dispositivos
+El diseño mantiene paridad de funciones entre versiones, pero adapta sus contenedores nativos para optimizar la usabilidad:
+- **Versión Web:** Utiliza un menú lateral fijo (*Sidebar*) a la izquierda, aprovechando el espacio panorámico para mantener los enlaces y el saldo siempre visibles.
+- **Versión Móvil:** Traslada la navegación a una barra inferior (*Bottom Tab Bar*) con iconos diseñados para la interacción ergonómica con el pulgar. Vistas como Mi Wallet se adaptan a formato tarjeta para evitar sobrecarga de información.
+
+## (h) Justificación Técnica
+
+### Usabilidad
+Se propone una navegación consistente e intuitiva, manteniendo patrones familiares (como el layout típico de redes sociales en el Feed). Se prioriza una presentación limpia con *cards* (tarjetas) para las ofertas, reduciendo la carga cognitiva al mostrar solo el título, reputación y costo a simple vista, dejando los detalles técnicos para un segundo nivel de navegación.
+
+### Eficiencia de interacción
+El flujo de usuario es circular y de bajo esfuerzo. La navegación plana mediante pestañas inferiores permite saltar de descubrir ofertas a chatear con un solo toque, evitando que el usuario deba retroceder múltiples veces para cambiar de contexto.
+
+### Claridad estructural
+Las vistas se organizan separando estrictamente el mercado (`/app`) de la gestión administrativa (`/admin`). Dentro de la aplicación de usuarios, el espacio se divide lógicamente en descubrimiento (Feed), gestión (Propuestas/Wallet) y comunicación (Chats), asegurando que el modelo mental del usuario coincida con la interfaz.
+
+### Escalabilidad
+El uso de una arquitectura basada en componentes modulares con Ionic y React Router facilitará el crecimiento del proyecto. Agregar una nueva funcionalidad a futuro (como un foro o soporte técnico) solo requerirá añadir un nuevo componente al enrutador sin alterar el flujo principal de trueques.
