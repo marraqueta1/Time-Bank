@@ -125,6 +125,7 @@ Falta de incentivos para enseñar: Muchos estudiantes y profesores desean compar
 ## (EP1.3) Bocetos UI/UX
 [Figma - Prototipo de UI/UX](https://www.figma.com/design/wL91AmcXIUWYASwxa2QKNe/Diseño-UI-UX--Community-?node-id=0-1&p=f&t=wQqFvR5lZ5YBtsvj-0)
 
+### EP1.4
 ## (a) Arquitectura de Navegación
 ### 1. Rutas principales y secundarias
 
