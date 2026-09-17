@@ -125,7 +125,7 @@ Falta de incentivos para enseñar: Muchos estudiantes y profesores desean compar
 ## (EP1.3) Bocetos UI/UX
 [Figma - Prototipo de UI/UX](https://www.figma.com/design/wL91AmcXIUWYASwxa2QKNe/Diseño-UI-UX--Community-?node-id=0-1&p=f&t=wQqFvR5lZ5YBtsvj-0)
 
-## Arquitectura de Navegación
+## (a) Arquitectura de Navegación
 ### 1. Rutas principales y secundarias
 
 #### Rutas públicas
@@ -133,31 +133,57 @@ Falta de incentivos para enseñar: Muchos estudiantes y profesores desean compar
 | Ruta | Vista | Descripción |
 |---|---|---|
 | `/login` | Inicio de sesión | Permite al usuario ingresar al sistema mediante sus credenciales. |
-| `/registro` | Registro | Permite crear una nueva cuenta de usuario. |
+| `/registro` | Registro | Permite crear una nueva cuenta, seleccionando el rol de Estudiante o Profesor. |
 
-#### Rutas protegidas del Estudiante
-
-| Ruta | Vista | Descripción |
-|---|---|---|
-| `/estudiante/inicio` | Inicio | Presenta un resumen general y accesos a las funcionalidades principales. |
-| `/estudiante/caracterizacion` | Caracterización | Permite responder el instrumento de caracterización. |
-| `/estudiante/perfil` | Perfil | Presenta las preferencias y necesidades de apoyo identificadas. |
-| `/estudiante/recursos` | Micro-recursos | Presenta los recursos disponibles y priorizados. |
-| `/estudiante/recursos/:id` | Detalle de recurso | Permite visualizar un micro-recurso seleccionado. |
-| `/estudiante/progreso` | Progreso | Permite consultar actividades realizadas, pendientes y recursos previamente utilizados. |
-
-#### Rutas protegidas del Docente
+#### Rutas protegidas del Usuario (Estudiante y Profesor)
 
 | Ruta | Vista | Descripción |
 |---|---|---|
-| `/docente/inicio` | Inicio docente | Presenta un resumen de las funcionalidades disponibles. |
-| `/docente/recursos` | Gestión de recursos | Permite consultar los micro-recursos existentes. |
-| `/docente/recursos/nuevo` | Crear recurso | Permite registrar un nuevo micro-recurso. |
-| `/docente/recursos/:id/editar` | Editar recurso | Permite modificar un recurso existente. |
+| `/app/feed` | Inicio (Feed) | Presenta el muro principal con las publicaciones de ofertas y salas disponibles. |
+| `/app/create` | Crear publicación | Permite al usuario registrar una nueva oferta 1-a-1, sala grupal o necesidad. |
+| `/app/offers/:id` | Detalle de Oferta | Permite visualizar la información completa y reseñas de una publicación específica. |
+| `/app/proposals` | Propuestas | Permite gestionar, aceptar o rechazar las propuestas de trueque enviadas y recibidas. |
+| `/app/chat` | Chats | Presenta el listado general de conversaciones activas con otros miembros. |
+| `/app/chat/:id` | Conversación | Permite el intercambio de mensajes directos en tiempo real para negociar un trueque. |
+| `/app/wallet` | Mi Wallet | Presenta el saldo actual de puntos y permite canjear beneficios. |
+| `/app/profile` | Perfil | Presenta las estadísticas, reputación (rating) y el historial de publicaciones del usuario. |
 
 #### Rutas protegidas del Administrador
 
 | Ruta | Vista | Descripción |
 |---|---|---|
-| `/admin/inicio` | Inicio administrador | Presenta las opciones generales de administración. |
-| `/admin/usuarios` | Gestión de usuarios | Permite consultar y administrar los usuarios registrados. |
+| `/admin/dashboard` | Dashboard | Presenta un resumen estadístico general y los reportes urgentes de la plataforma. |
+| `/admin/usuarios` | Gestión de usuarios | Permite consultar, administrar y aplicar bloqueos a los usuarios registrados. |
+| `/admin/categorias` | Gestión de categorías | Permite mantener organizado el buscador agregando o eliminando rubros de habilidades. |
+| `/admin/reportes` | Gestión de reportes | Permite revisar disputas y denuncias pendientes para tomar acciones disciplinarias. |
+
+### (b) Relaciones jerárquicas entre vistas
+La aplicación se organiza mediante una estructura jerárquica en la que las funcionalidades disponibles dependen del rol del usuario autenticado.
+
+```text
+Aplicación
+│
+├── Rutas públicas
+│   ├── Inicio de sesión (Login)
+│   └── Registro
+│
+└── Rutas protegidas
+    │
+    ├── Usuario (Estudiante y Profesor)
+    │   ├── Inicio (Feed principal)
+    │   │   └── Detalle de oferta
+    │   ├── Crear publicación
+    │   ├── Propuestas
+    │   ├── Chats
+    │   │   └── Conversación en tiempo real
+    │   ├── Perfil
+    │   └── Mi Wallet
+    │
+    └── Administrador
+        ├── Dashboard (Resumen general)
+        ├── Gestión de usuarios
+        ├── Gestión de categorías
+        ├── Gestión de reportes
+        ├── Estadísticas
+        └── Configuración
+```
