@@ -1,11 +1,5 @@
-import { Route, Navigate } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-
-import Login from './pages/Login';
-import Register from './pages/Register';
-import TabsLayout from './components/TabsLayout';
-import ProtectedRoute from './components/ProtectedRoute';
+import { IonApp, setupIonicReact } from '@ionic/react';
+import AppRouter from './routes/AppRouter';
 
 import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
@@ -16,21 +10,8 @@ setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        {/* Aquí está el cambio a element={<Componente />} */}
-        <Route exact path="/login" element={<Login />} />
-        <Route exact path="/registro" element={<Register />} />
-        
-        <Route exact path="/" element={<Navigate to="/login" />} />
-        
-        <Route path="/app/*" element={
-          <ProtectedRoute>
-            <TabsLayout />
-          </ProtectedRoute>
-        } />
-      </IonRouterOutlet>
-    </IonReactRouter>
+    <AppRouter />
   </IonApp>
 );
+
 export default App;
