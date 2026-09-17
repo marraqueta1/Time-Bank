@@ -122,5 +122,39 @@ Falta de incentivos para enseñar: Muchos estudiantes y profesores desean compar
 
 - Dispositivo y Contexto: Laptop para uso web (aprovechando el menú lateral según el RNF-03) al planificar clases, y smartphone (interfaz mobile-first con tabs) para gestionar solicitudes sobre la marcha.
 
-## Bocetos UI/UX
+## (EP1.3) Bocetos UI/UX
 [Figma - Prototipo de UI/UX](https://www.figma.com/design/wL91AmcXIUWYASwxa2QKNe/Diseño-UI-UX--Community-?node-id=0-1&p=f&t=wQqFvR5lZ5YBtsvj-0)
+
+#### Rutas públicas
+
+| Ruta | Vista | Descripción |
+|---|---|---|
+| `/login` | Inicio de sesión | Permite al usuario ingresar al sistema mediante sus credenciales. |
+| `/registro` | Registro | Permite crear una nueva cuenta de usuario. |
+
+#### Rutas protegidas del Estudiante
+
+| Ruta | Vista | Descripción |
+|---|---|---|
+| `/estudiante/inicio` | Inicio | Presenta un resumen general y accesos a las funcionalidades principales. |
+| `/estudiante/caracterizacion` | Caracterización | Permite responder el instrumento de caracterización. |
+| `/estudiante/perfil` | Perfil | Presenta las preferencias y necesidades de apoyo identificadas. |
+| `/estudiante/recursos` | Micro-recursos | Presenta los recursos disponibles y priorizados. |
+| `/estudiante/recursos/:id` | Detalle de recurso | Permite visualizar un micro-recurso seleccionado. |
+| `/estudiante/progreso` | Progreso | Permite consultar actividades realizadas, pendientes y recursos previamente utilizados. |
+
+#### Rutas protegidas del Docente
+
+| Ruta | Vista | Descripción |
+|---|---|---|
+| `/docente/inicio` | Inicio docente | Presenta un resumen de las funcionalidades disponibles. |
+| `/docente/recursos` | Gestión de recursos | Permite consultar los micro-recursos existentes. |
+| `/docente/recursos/nuevo` | Crear recurso | Permite registrar un nuevo micro-recurso. |
+| `/docente/recursos/:id/editar` | Editar recurso | Permite modificar un recurso existente. |
+
+#### Rutas protegidas del Administrador
+
+| Ruta | Vista | Descripción |
+|---|---|---|
+| `/admin/inicio` | Inicio administrador | Presenta las opciones generales de administración. |
+| `/admin/usuarios` | Gestión de usuarios | Permite consultar y administrar los usuarios registrados. |
