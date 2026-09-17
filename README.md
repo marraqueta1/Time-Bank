@@ -240,6 +240,7 @@ Los flujos de tareas (*task flows*) representan la secuencia de acciones que rea
 ### Task Flow 1: Creación de una publicación
 
 **Rol:** Usuario (Estudiante / Profesor)
+
 **Objetivo:** Registrar y publicar una oferta de habilidad o una necesidad en el Feed.
 
 ```text
@@ -268,6 +269,7 @@ errores    publicación
 ```
 ### Task Flow 2: Proponer e iniciar un trueque
 **Rol:** Usuario (Estudiante / Profesor)
+
 **Objetivo:** Encontrar una oferta de interés, proponer un intercambio y acordar los detalles 
 
 ```text 
