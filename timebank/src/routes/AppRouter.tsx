@@ -1,4 +1,3 @@
-// src/routes/AppRouter.tsx
 import { Route, Navigate } from 'react-router-dom';
 import { IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -13,10 +12,10 @@ const AppRouter: React.FC = () => {
   return (
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route exact path="/login" element={<Login />} />
-        <Route exact path="/registro" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/registro" element={<Register />} />
         
-        <Route exact path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Navigate to="/login" />} />
         
         <Route path="/app/*" element={
           <ProtectedRoute>
