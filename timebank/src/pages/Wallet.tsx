@@ -15,7 +15,6 @@ const Wallet: React.FC = () => {
 
       <IonContent className="ion-padding">
         
-        {/* Tarjeta de Saldo */}
         <IonCard style={{ background: 'linear-gradient(90deg, #ff9800 0%, #ffc107 100%)', color: 'white', margin: '0 0 20px 0' }}>
           <IonCardHeader>
             <IonCardSubtitle style={{ color: 'white' }}>SALDO DISPONIBLE</IonCardSubtitle>
@@ -28,7 +27,6 @@ const Wallet: React.FC = () => {
           </div>
         </IonCard>
 
-        {/* Movimientos Recientes */}
         <IonList>
           <IonListHeader>
             <IonLabel>Movimientos recientes</IonLabel>

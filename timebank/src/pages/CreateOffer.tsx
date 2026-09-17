@@ -16,7 +16,6 @@ const CreateOffer: React.FC = () => {
       <IonContent className="ion-padding">
         <p style={{ color: 'gray', marginTop: 0 }}>Elige el tipo de publicación</p>
 
-        {/* Botones de selección superior */}
         <IonSegment value="oferta" className="ion-margin-bottom">
           <IonSegmentButton value="oferta">
             <IonLabel>Oferta 1-a-1</IonLabel>
@@ -30,7 +29,6 @@ const CreateOffer: React.FC = () => {
         </IonSegment>
 
         <IonList>
-          {/* Formulario */}
           <IonItem lines="full">
             <IonLabel position="stacked">Título *</IonLabel>
             <IonInput placeholder="Ej: Introducción a Python"></IonInput>

@@ -33,10 +33,8 @@ const Feed: React.FC = () => {
       </IonHeader>
 
       <IonContent className="ion-padding">
-        {/* Buscador */}
         <IonSearchbar placeholder="Buscar habilidad..."></IonSearchbar>
 
-        {/* Categorías (Filtros) */}
         <div style={{ display: 'flex', overflowX: 'auto', paddingBottom: '10px' }}>
           <IonChip color="primary">Todo</IonChip>
           <IonChip outline={true}>Ofertas</IonChip>
@@ -45,7 +43,6 @@ const Feed: React.FC = () => {
           <IonChip outline={true}>Inglés</IonChip>
         </div>
 
-        {/* Tarjeta de Oferta 1 (Figma) */}
         <IonCard className="ion-margin-bottom">
           <IonItem lines="none">
             <IonAvatar slot="start">
@@ -72,7 +69,6 @@ const Feed: React.FC = () => {
           </IonCardContent>
         </IonCard>
 
-        {/* Tarjeta de Oferta 2 (Figma) */}
         <IonCard>
           <IonItem lines="none">
             <IonAvatar slot="start">
