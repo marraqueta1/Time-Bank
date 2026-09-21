@@ -1,145 +1,114 @@
 # Plataforma Educativa Adaptativa para la Selección de Micro-Recursos según Preferencias de Aprendizaje
 
-## Justificación del Problema
+## Índice
+1. [Justificación del problema](#justificación-del-problema)
+2. [Usuarios objetivo](#usuarios-objetivo-quién-usará-la-aplicación)
+    - [Roles del Sistema](#roles-del-sistema)
+    - [Proto-personas](#proto-personas)
+3. [Requerimientos](#requerimientos)
+4. [Arquitectura de Navegación](#arquitectura-de-navegación)
+    - [Diferenciación de acceso según roles](#diferenciación-de-acceso-según-roles)
+    - [Flujos de Tareas](#flujos-de-tareas)
+    - [Puntos críticos de interacción](#puntos-críticos-de-interacción)
+    - [Justificación Técnica](#justificación-técnica)
+5. [Bocetos UX/UI](#bocetos-uiux)
 
+---
+
+## Justificación del problema
 La relevancia de TimeBank radica en su capacidad de democratizar el acceso al conocimiento mediante un modelo de economía colaborativa. No se trata solo de ahorrar dinero, sino de crear una comunidad de apoyo mutuo que fortalezca la experiencia universitaria y reduzca las brechas de desigualdad.
 
 Sin una solución como la que proponemos, las consecuencias son claras:
 
-Aumento de la deserción: La presión financiera seguirá empujando a estudiantes a abandonar sus carreras.
+- Aumento de la deserción: La presión financiera seguirá empujando a estudiantes a abandonar sus carreras.
+- Profundización de las desigualdades: Quienes pueden pagar tutorías tendrán una ventaja académica injusta sobre quienes no.
+- Desaprovechamiento del talento interno: Existe un vasto capital humano dentro de la propia comunidad universitaria (estudiantes avanzados, egresados) que podría compartir su conocimiento, pero carece de un canal formal y seguro para hacerlo.
+- Falta de incentivos para enseñar: Muchos estudiantes y profesores desean compartir su conocimiento, pero no existe un sistema que valore y recompense ese tiempo de manera tangible.
 
-Profundización de las desigualdades: Quienes pueden pagar tutorías tendrán una ventaja académica injusta sobre quienes no.
+---
 
-Desaprovechamiento del talento interno: Existe un vasto capital humano dentro de la propia comunidad universitaria (estudiantes avanzados, egresados) que podría compartir su conocimiento, pero carece de un canal formal y seguro para hacerlo.
+## Usuarios objetivo (Quién usará la aplicación)
 
-Falta de incentivos para enseñar: Muchos estudiantes y profesores desean compartir su conocimiento, pero no existe un sistema que valore y recompense ese tiempo de manera tangible.
+- **Definición y Características:** Adultos y estudiantes que buscan optimizar sus recursos intercambiando habilidades en lugar de dinero.
+- **Contexto de Uso y Dispositivos:** Entornos móviles y dinámicos (transporte público, campus universitario, hogar). Acceso mediante smartphones o computadores con conexión a internet.
+- **Nivel de Experiencia Tecnológica:** Medio-alto. Están habituados al uso de aplicaciones de entrega rápida y transporte compartido, por lo que esperan interfaces intuitivas y de respuesta inmediata.
+- **Necesidades de Privacidad y Seguridad:** Exigen protección de datos de contacto y geolocalización difuminada hasta que ambas partes acepten formalmente el intercambio.
+- **Supuestos Utilizados:** La construcción de estos perfiles asume que los usuarios poseen al menos una habilidad transferible, tienen disposición temporal para concretar acuerdos presenciales o remotos, y confían en la validación mediante sistemas de reseñas.
 
+### Roles del Sistema
+- **Usuario:** Intercambiar tiempo entre ellos.
+- **Profesores:** Pueden generar salas para enseñar.
+- **Administrador:** Moderador del Sistema.
 
+---
 
-### Caracterización General de Usuarios Objetivo
+## Proto-personas
 
-#### Definición y Características
-- Adultos y estudiantes que buscan optimizar sus recursos intercambiando habilidades en lugar de dinero.
+### Proto-Persona 1
+- **Rol:** Usuario.
+- **Características Generales:** Estudiante de ingeniería en informática, 22 años, se moviliza frecuentemente entre la universidad y su ciudad de origen.
+- **Necesidades y Objetivos:** Requiere ayuda con el diseño gráfico de un proyecto. Ofrece a cambio horas de programación o reparación de computadores.
+- **Puntos de Frustración:** Carencia de presupuesto para contratar freelancers y miedo a que la contraparte abandone el acuerdo a la mitad.
+- **Funcionalidades a Utilizar:** Sistema de "Escrow" (garantía de horas) y matchmaking por etiquetas.
 
-### Contexto de Uso y Dispositivos
-- Entornos móviles y dinámicos (transporte público, campus universitario, hogar). Acceso mediante smartphones o computadores con conexión a internet.
+### Proto-Persona 2
+- **Rol:** Usuario.
+- **Características Generales:** Joven de 25 años en búsqueda activa de empleo (bodega o retail), con fuertes habilidades en mantenimiento del hogar y paisajismo.
+- **Necesidades y Objetivos:** Necesita instalar un aire acondicionado portátil y reparar un electrodoméstico. Ofrece a cambio servicios de jardinería u orden de inventarios.
+- **Puntos de Frustración:** Dificultad para encontrar asistencia técnica de confianza en su radio cercano sin gastar sus ahorros.
+- **Funcionalidades a Utilizar:** Geolocalización de ofertas cercanas y sistema de reseñas.
 
-### Nivel de Experiencia Tecnológica
-- Medio-alto. Están habituados al uso de aplicaciones de entrega rápida y transporte compartido, por lo que esperan interfaces intuitivas y de respuesta inmediata.
+### Proto-Persona 3
+- **Rol:** Profesor/Ayudante.
+- **Características:** 25 años, egresado de Ingeniería Civil. Experto en Python.
+- **Necesidades:** Enseñar de forma flexible y obtener beneficios tangibles (tiempo/puntos canjeables).
+- **Objetivos:** Impartir tutorías individuales y "salas de ayudantía" grupales.
+- **Puntos de Frustración:** Pérdida de tiempo buscando alumnos y gestionando acuerdos o inasistencias.
+- **Funcionalidades a utilizar:**
+  - RF-01 y RF-05: Creación y gestión de sus ofertas de habilidades (tutorías y salas de ayudantía), definiendo título, categoría, duración y modalidad.
+  - RF-03: Gestión de las propuestas de trueque recibidas para aceptar, rechazar o cancelar la participación de los alumnos.
+  - RF-04: Gestión de la billetera de tiempo para visualizar su saldo actual y el historial de horas ganadas impartiendo clases.
+  - RF-06: Gestión de calificaciones para evaluar a los alumnos y construir su propia reputación mediante reseñas.
+- **Dispositivo y Contexto:** Laptop para uso web (aprovechando el menú lateral según el RNF-03) al planificar clases, y smartphone (interfaz mobile-first con tabs) para gestionar solicitudes sobre la marcha.
 
-### Necesidades de Privacidad y Seguridad
-- Exigen protección de datos de contacto y geolocalización difuminada hasta que ambas partes acepten formalmente el intercambio.
+---
 
-### Roles Considerados
-- Usuario, Profesor y Administrador.
+## Requerimientos
 
-### Supuestos Utilizados
-- La construcción de estos perfiles asume que los usuarios poseen al menos una habilidad transferible, tienen disposición temporal para concretar acuerdos presenciales o remotos, y confían en la validación mediante sistemas de reseñas.
+### Requerimientos Funcionales por Rol
 
-## Proto-Personas
+| ID | Requerimiento funcional | Rol |
+|---|---|---|
+| **RF-01** | El sistema permitirá al usuario gestionar sus ofertas de habilidades, incluyendo la creación, modificación y eliminación de los servicios que imparte. | Usuario |
+| **RF-02** | El sistema permitirá al usuario gestionar sus solicitudes de tiempo, publicando y editando las necesidades o tareas en las que requiere ayuda. | Usuario |
+| **RF-03** | El sistema permitirá al usuario gestionar las propuestas de trueque recibidas, teniendo la capacidad de aceptar, rechazar o cancelar un acuerdo de intercambio. | Usuario |
+| **RF-04** | El sistema permitirá al usuario gestionar su billetera de tiempo, visualizando el saldo actual y el historial detallado de horas ganadas y gastadas. | Usuario |
+| **RF-05** | El usuario crea una oferta de habilidad que puede enseñar (título, categoría, descripción, duración, modalidad) | Usuario |
+| **RF-06** | El sistema permitirá al usuario gestionar las calificaciones de sus intercambios, emitiendo una puntuación y una reseña escrita a la contraparte una vez finalizado el servicio. | Usuario |
+| **RF-07** | El sistema permitirá al administrador gestionar las disputas entre usuarios, revisando los casos reportados para reasignar o devolver los fondos de tiempo retenidos. | Administrador |
+| **RF-08** | El sistema permitirá al administrador gestionar el estado de las cuentas de la plataforma, pudiendo suspender o bloquear definitivamente a los perfiles fraudulentos. | Administrador |
+| **RF-09** | El sistema permitirá al administrador gestionar el catálogo global de categorías de habilidades, agregando o eliminando rubros para mantener organizado el buscador. | Administrador |
 
-### Proto-Persona 1: 
+### Requerimientos No Funcionales
+- **RNF-01 (Rendimiento):** El sistema responderá a las consultas de transacciones de la billetera de tiempo en un tiempo máximo de 2 segundos.
+- **RNF-02 (Seguridad):** El sistema protegerá la manipulación de saldos y endpoints privados utilizando el estándar de autenticación por tokens JWT (JSON Web Tokens).
+- **RNF-03 (Usabilidad):** Interfaz mobile-first con tabs inferiores en móvil y menú lateral en web utilizando los componentes del framework Ionic con React.
+- **RNF-04 (Arquitectura/Compatibilidad):** El backend del sistema operará mediante una arquitectura de APIs RESTful conectada de forma directa a una base de datos relacional.
+- **RNF-05 (Disponibilidad):** El servidor garantizará un tiempo de actividad (uptime) mínimo del 99% mensual para asegurar el acceso ininterrumpido al tablón de misiones.
 
-- **Rol: Usuario.**
+---
 
-- Características Generales: Estudiante de ingeniería en informática, 22 años, se moviliza frecuentemente entre la universidad y su ciudad de origen.
+## Arquitectura de Navegación
 
-- Necesidades y Objetivos: Requiere ayuda con el diseño gráfico de un proyecto. Ofrece a cambio horas de programación o reparación de computadores.
-
-- Puntos de Frustración: Carencia de presupuesto para contratar freelancers y miedo a que la contraparte abandone el acuerdo a la mitad.
-
-- Funcionalidades a Utilizar: Sistema de "Escrow" (garantía de horas) y matchmaking por etiquetas.
-
-### Proto-Persona 2: 
-
-- **Rol: Usuario.**
-
-- Características Generales: Joven de 25 años en búsqueda activa de empleo (bodega o retail), con fuertes habilidades en mantenimiento del hogar y paisajismo.
-
-- Necesidades y Objetivos: Necesita instalar un aire acondicionado portátil y reparar un electrodoméstico. Ofrece a cambio servicios de jardinería u orden de inventarios.
-
-- Puntos de Frustración: Dificultad para encontrar asistencia técnica de confianza en su radio cercano sin gastar sus ahorros.
-
-- Funcionalidades a Utilizar: Geolocalización de ofertas cercanas y sistema de reseñas.
-
-
-### Proto-Persona 3:
-
-- **Rol: Profesor/Ayudante**
-
-- Características: 25 años, egresado de Ingeniería Civil. Experto en Python.
-
-- Necesidades: Enseñar de forma flexible y obtener beneficios tangibles (tiempo/puntos canjeables).
-
-- Objetivos: Impartir tutorías individuales y "salas de ayudantía" grupales.
-
-- Puntos de Frustración: Pérdida de tiempo buscando alumnos y gestionando acuerdos o inasistencias.
-
-- Funcionalidades a utilizar:
-
-- RF-01 y RF-05: Creación y gestión de sus ofertas de habilidades (tutorías y salas de ayudantía), definiendo título, categoría, duración y modalidad.
-
-- RF-03: Gestión de las propuestas de trueque recibidas para aceptar, rechazar o cancelar la participación de los alumnos.
-
-- RF-04: Gestión de la billetera de tiempo para visualizar su saldo actual y el historial de horas ganadas impartiendo clases.
-
-- RF-06: Gestión de calificaciones para evaluar a los alumnos y construir su propia reputación mediante reseñas.
-
-- Dispositivo y Contexto: Laptop para uso web (aprovechando el menú lateral según el RNF-03) al planificar clases, y smartphone (interfaz mobile-first con tabs) para gestionar solicitudes sobre la marcha.
-
-
-EP 1.1: 
-
-Roles: Usuario (Intercambiar tiempo entre ellos), Profesores(Pueden generar salas para enseñar) y Administrador (Moderador del Sistema).
-
-## Requerimientos Funcionales:
-- RF-01: El sistema permitirá al usuario gestionar sus ofertas de habilidades, incluyendo la creación, modificación y eliminación de los servicios que imparte.
-
-- RF-02: El sistema permitirá al usuario gestionar sus solicitudes de tiempo, publicando y editando las necesidades o tareas en las que requiere ayuda.
-
-- RF-03: El sistema permitirá al usuario gestionar las propuestas de trueque recibidas, teniendo la capacidad de aceptar, rechazar o cancelar un acuerdo de intercambio.
-
-- RF-04: El sistema permitirá al usuario gestionar su billetera de tiempo, visualizando el saldo actual y el historial detallado de horas ganadas y gastadas.
-
-- RF-05: El usuario crea una oferta de habilidad que puede enseñar (título, categoría, descripción, duración, modalidad)
-
-- RF-06: El sistema permitirá al usuario gestionar las calificaciones de sus intercambios, emitiendo una puntuación y una reseña escrita a la contraparte una vez finalizado el servicio.
-
-- RF-07: El sistema permitirá al administrador gestionar las disputas entre usuarios, revisando los casos reportados para reasignar o devolver los fondos de tiempo retenidos.
-
-- RF-08: El sistema permitirá al administrador gestionar el estado de las cuentas de la plataforma, pudiendo suspender o bloquear definitivamente a los perfiles fraudulentos.
-
-- RF-09: El sistema permitirá al administrador gestionar el catálogo global de categorías de habilidades, agregando o eliminando rubros para mantener organizado el buscador.
-
-## Requerimientos No Funcionales: 
-
-- RNF-01 (Rendimiento): El sistema responderá a las consultas de transacciones de la billetera de tiempo en un tiempo máximo de 2 segundos.
-
-- RNF-02 (Seguridad): El sistema protegerá la manipulación de saldos y endpoints privados utilizando el estándar de autenticación por tokens JWT (JSON Web Tokens).
-
-- RNF-03 (Usabilidad): Interfaz mobile-first con tabs inferiores en móvil y menú lateral en web utilizando los componentes del framework Ionic con React.
-
-- RNF-04 (Arquitectura/Compatibilidad): El backend del sistema operará mediante una arquitectura de APIs RESTful conectada de forma directa a una base de datos relacional.
-
-- RNF-05 (Disponibilidad): El servidor garantizará un tiempo de actividad (uptime) mínimo del 99% mensual para asegurar el acceso ininterrumpido al tablón de misiones.
-
-
-## (EP1.3) Bocetos UI/UX
-[Figma - Prototipo de UI/UX](https://www.figma.com/design/wL91AmcXIUWYASwxa2QKNe/Diseño-UI-UX--Community-?node-id=0-1&p=f&t=wQqFvR5lZ5YBtsvj-0)
-
-### EP1.4
-## (a) Arquitectura de Navegación
 ### 1. Rutas principales y secundarias
 
 #### Rutas públicas
-
 | Ruta | Vista | Descripción |
 |---|---|---|
 | `/login` | Inicio de sesión | Permite al usuario ingresar al sistema mediante sus credenciales. |
 | `/registro` | Registro | Permite crear una nueva cuenta, seleccionando el rol de Estudiante o Profesor. |
 
 #### Rutas protegidas del Usuario (Estudiante y Profesor)
-
 | Ruta | Vista | Descripción |
 |---|---|---|
 | `/app/feed` | Inicio (Feed) | Presenta el muro principal con las publicaciones de ofertas y salas disponibles. |
@@ -152,7 +121,6 @@ Roles: Usuario (Intercambiar tiempo entre ellos), Profesores(Pueden generar sala
 | `/app/profile` | Perfil | Presenta las estadísticas, reputación (rating) y el historial de publicaciones del usuario. |
 
 #### Rutas protegidas del Administrador
-
 | Ruta | Vista | Descripción |
 |---|---|---|
 | `/admin/dashboard` | Dashboard | Presenta un resumen estadístico general y los reportes urgentes de la plataforma. |
@@ -160,7 +128,7 @@ Roles: Usuario (Intercambiar tiempo entre ellos), Profesores(Pueden generar sala
 | `/admin/categorias` | Gestión de categorías | Permite mantener organizado el buscador agregando o eliminando rubros de habilidades. |
 | `/admin/reportes` | Gestión de reportes | Permite revisar disputas y denuncias pendientes para tomar acciones disciplinarias. |
 
-### (b) Relaciones jerárquicas entre vistas
+### 2. Relaciones jerárquicas entre vistas
 La aplicación se organiza mediante una estructura jerárquica en la que las funcionalidades disponibles dependen del rol del usuario autenticado.
 
 ```text
@@ -191,13 +159,12 @@ Aplicación
         └── Configuración
 ```
 
-## (c) Flujo de navegación entre funcionalidades
-El ecosistema conecta el descubrimiento de habilidades con la negociación de forma circular. Un usuario explora ofertas en el Feed principal y selecciona una publicación para acceder a su detalle. Desde allí, utiliza la opción de enviar una propuesta, lo cual alimenta directamente la vista de Propuestas enviadas. Si la contraparte responde o acepta, el flujo permite saltar inmediatamente al Chat para afinar detalles en tiempo real antes de concretar el intercambio y liberar el saldo.
+---
 
-## (d) Diferenciación de acceso según roles
-La aplicación deberá controlar el acceso a las diferentes funcionalidades de acuerdo con el rol del usuario autenticado. 
+## Diferenciación de acceso según roles
 
-Se consideran los siguientes roles principales:
+La aplicación deberá controlar el acceso a las diferentes funcionalidades de acuerdo con el rol del usuario autenticado. Se consideran los siguientes roles principales:
+
 - **Usuario (Estudiante / Profesor)**
 - **Administrador**
 
@@ -224,7 +191,8 @@ Será responsable de la moderación y estabilidad del sistema. Podrá consultar 
 
 ### Control de acceso a rutas
 La diferenciación por roles deberá aplicarse en la protección de rutas:
-```
+
+```text
 /login
 /registro
 
@@ -236,13 +204,17 @@ La diferenciación por roles deberá aplicarse en la protección de rutas:
 /admin/dashboard
 /admin/usuarios
 ```
-## (e) Flujos de Tareas
+
+---
+
+## Flujos de Tareas
 Los flujos de tareas (*task flows*) representan la secuencia de acciones que realiza un usuario para completar una actividad específica.
 
+### Flujo de navegación entre funcionalidades
+El ecosistema conecta el descubrimiento de habilidades con la negociación de forma circular. Un usuario explora ofertas en el Feed principal y selecciona una publicación para acceder a su detalle. Desde allí, utiliza la opción de enviar una propuesta, lo cual alimenta directamente la vista de Propuestas enviadas. Si la contraparte responde o acepta, el flujo permite saltar inmediatamente al Chat para afinar detalles en tiempo real antes de concretar el intercambio y liberar el saldo.
+
 ### Task Flow 1: Creación de una publicación
-
 **Rol:** Usuario (Estudiante / Profesor)
-
 **Objetivo:** Registrar y publicar una oferta de habilidad o una necesidad en el Feed.
 
 ```text
@@ -269,10 +241,10 @@ errores    publicación
               ↓
         Mostrar en el Feed
 ```
+
 ### Task Flow 2: Proponer e iniciar un trueque
 **Rol:** Usuario (Estudiante / Profesor)
-
-**Objetivo:** Encontrar una oferta de interés, proponer un intercambio y acordar los detalles 
+**Objetivo:** Encontrar una oferta de interés, proponer un intercambio y acordar los detalles.
 
 ```text 
 Explorar Feed principal
@@ -293,7 +265,10 @@ Se habilita sala de Chat
       ↓
 Acordar fecha/hora en tiempo real
 ```
-## (f) Puntos críticos de interacción
+
+---
+
+## Puntos críticos de interacción
 Los puntos críticos corresponden a acciones donde una interfaz poco clara puede afectar la experiencia o los fondos del usuario:
 
 1. **Aceptación de Propuestas:** Los botones de "Aceptar" o "Contraofertar" definen el estado de la transacción. Un error aquí compromete el tiempo/puntos del usuario, por lo que la interfaz debe exigir una confirmación clara.
@@ -301,12 +276,14 @@ Los puntos críticos corresponden a acciones donde una interfaz poco clara puede
 3. **Calificación Final:** Es el paso que libera los puntos retenidos hacia el proveedor. Debe ser de llenado rápido y obligatorio antes de permitir un nuevo trueque con esa persona.
 4. **Moderación Administrativa:** El botón de "Suspender usuario" en el panel de administrador revoca el acceso de forma inmediata. Debe contar con una validación secundaria para evitar bloqueos accidentales.
 
-## (g) Coherencia de experiencia entre dispositivos
+### Coherencia de experiencia entre dispositivos
 El diseño mantiene paridad de funciones entre versiones, pero adapta sus contenedores nativos para optimizar la usabilidad:
 - **Versión Web:** Utiliza un menú lateral fijo (*Sidebar*) a la izquierda, aprovechando el espacio panorámico para mantener los enlaces y el saldo siempre visibles.
 - **Versión Móvil:** Traslada la navegación a una barra inferior (*Bottom Tab Bar*) con iconos diseñados para la interacción ergonómica con el pulgar. Vistas como Mi Wallet se adaptan a formato tarjeta para evitar sobrecarga de información.
 
-## (h) Justificación Técnica
+---
+
+## Justificación Técnica
 
 ### Usabilidad
 Se propone una navegación consistente e intuitiva, manteniendo patrones familiares (como el layout típico de redes sociales en el Feed). Se prioriza una presentación limpia con *cards* (tarjetas) para las ofertas, reduciendo la carga cognitiva al mostrar solo el título, reputación y costo a simple vista, dejando los detalles técnicos para un segundo nivel de navegación.
@@ -319,3 +296,8 @@ Las vistas se organizan separando estrictamente el mercado (`/app`) de la gesti�
 
 ### Escalabilidad
 El uso de una arquitectura basada en componentes modulares con Ionic y React Router facilitará el crecimiento del proyecto. Agregar una nueva funcionalidad a futuro (como un foro o soporte técnico) solo requerirá añadir un nuevo componente al enrutador sin alterar el flujo principal de trueques.
+
+---
+
+## Bocetos UI/UX
+[Figma - Prototipo de UI/UX](https://www.figma.com/design/wL91AmcXIUWYASwxa2QKNe/Diseño-UI-UX--Community-?node-id=0-1&p=f&t=wQqFvR5lZ5YBtsvj-0)
