@@ -1,5 +1,7 @@
 # Plataforma Educativa Adaptativa para la Selección de Micro-Recursos según Preferencias de Aprendizaje
 
+### El código del frontend esta en otra Branch (frontend)
+
 ## Índice
 1. [Justificación del problema](#justificación-del-problema)
 2. [Usuarios objetivo](#usuarios-objetivo-quién-usará-la-aplicación)
