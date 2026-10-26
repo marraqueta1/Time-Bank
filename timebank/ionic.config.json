@@ -1,0 +1,7 @@
+{
+  "name": "timebank",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
