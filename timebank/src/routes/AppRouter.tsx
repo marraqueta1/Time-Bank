@@ -2,7 +2,6 @@ import { Route, Navigate } from 'react-router-dom';
 import { IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 
-// Importamos desde las carpetas correctas
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import TabsLayout from '../components/TabsLayout';
