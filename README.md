@@ -1,4 +1,4 @@
-# Plataforma Educativa Adaptativa para la Selección de Micro-Recursos según Preferencias de Aprendizaje
+# TimeBank
 
 ### El código del frontend esta en otra Branch (frontend)
 
