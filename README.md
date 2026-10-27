@@ -234,13 +234,13 @@ Definir duración y Puntos a cobrar
       ↓
 Seleccionar "Publicar"
       ↓
-¿Datos válidos e incompletos?
-   ↓          ↓
-  No         Sí
-   ↓          ↓
-Mostrar    Registrar
-errores    publicación
-              ↓
+¿Datos válidos y completos?
+  ↓             ↓
+  No            Sí
+  ↓             ↓
+Mostrar     Registrar
+errores     publicación
+                ↓
         Mostrar en el Feed
 ```
 
@@ -268,6 +268,30 @@ Se habilita sala de Chat
 Acordar fecha/hora en tiempo real
 ```
 
+### Task Flow 3 (Administrador)
+
+```markdown
+### Task Flow 3: Moderación y suspensión de usuarios
+**Rol:** Administrador
+**Objetivo:** Revisar un reporte y suspender la cuenta de un usuario que incumplió las reglas.
+
+```text
+Inicio de sesión (Rol Admin)
+      ↓
+Redirección automática al Dashboard (/admin)
+      ↓
+Seleccionar sección de "Reportes" o "Usuarios"
+      ↓
+Visualizar detalles del usuario reportado
+      ↓
+¿Suspender usuario?
+  ↓             ↓
+  No            Sí
+  ↓             ↓
+Volver al   Cambiar estado a "Suspendido"
+Dashboard         ↓
+            Mostrar alerta de éxito
+```
 ---
 
 ## Puntos críticos de interacción
