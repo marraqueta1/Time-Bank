@@ -268,9 +268,6 @@ Se habilita sala de Chat
 Acordar fecha/hora en tiempo real
 ```
 
-### Task Flow 3 (Administrador)
-
-```markdown
 ### Task Flow 3: Moderación y suspensión de usuarios
 **Rol:** Administrador
 **Objetivo:** Revisar un reporte y suspender la cuenta de un usuario que incumplió las reglas.
