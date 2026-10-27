@@ -58,7 +58,10 @@ const AppRouter: React.FC = () => {
           <AdminDashboard />
         </ProtectedRoute>
       } />
-
+      <Route path="/admin/categorias" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
+      <Route path="/admin/reportes" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
+      <Route path="/admin/estadisticas" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
+      <Route path="/admin/configuracion" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
       {/* Ruta 404 */}
       <Route path="*" element={<NotFound />} />
     </IonRouterOutlet>
