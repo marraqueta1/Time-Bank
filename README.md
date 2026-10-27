@@ -217,6 +217,7 @@ El ecosistema conecta el descubrimiento de habilidades con la negociación de fo
 
 ### Task Flow 1: Creación de una publicación
 **Rol:** Usuario (Estudiante / Profesor)
+
 **Objetivo:** Registrar y publicar una oferta de habilidad o una necesidad en el Feed.
 
 ```text
@@ -246,6 +247,7 @@ errores     publicación
 
 ### Task Flow 2: Proponer e iniciar un trueque
 **Rol:** Usuario (Estudiante / Profesor)
+
 **Objetivo:** Encontrar una oferta de interés, proponer un intercambio y acordar los detalles.
 
 ```text 
@@ -270,6 +272,7 @@ Acordar fecha/hora en tiempo real
 
 ### Task Flow 3: Moderación y suspensión de usuarios
 **Rol:** Administrador
+
 **Objetivo:** Revisar un reporte y suspender la cuenta de un usuario que incumplió las reglas.
 
 ```text
