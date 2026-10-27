@@ -1,5 +1,28 @@
 # TimeBank
 
+**TimeBank** es una plataforma educativa adaptativa diseñada para el intercambio de habilidades y micro-recursos mediante una economía colaborativa basada en horas.
+
+### Integrantes y Responsabilidades
+*   **Daniel Serey:** 
+*   **Carlos Sagardia:** 
+*   **Felipe Morales:** 
+*   **Byron Vazquez:** 
+
+
+### Instrucciones de Instalación y Ejecución
+Para ejecutar el entorno de desarrollo local (Frontend), asegúrate de tener instalado Node.js en tu equipo. Sigue estos pasos:
+
+1. Clona el repositorio en tu máquina local y asegúrate de estar en la rama `frontend`.
+2. Abre una terminal e ingresa a la carpeta donde está alojado el código de React/Ionic ejecutando:
+   ```bash
+   cd timebank/frontend
+3. Una vez dentro del directorio correcto, instala las dependencias mediante:
+   ```bash
+   npm install
+4. Finalmente ejecuta el comando para levantar el servidor:
+   ```bash
+   ionic serve
+
 ### El código del frontend esta en otra Branch (frontend)
 
 ## Índice
