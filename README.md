@@ -9,19 +9,39 @@
 *   **Byron Vazquez:** 
 
 
-### Instrucciones de Instalación y Ejecución
-Para ejecutar el entorno de desarrollo local (Frontend), asegúrate de tener instalado Node.js en tu equipo. Sigue estos pasos:
+1. Descarga el repositorio en tu máquina local y abre con tu entorno de desarrollo (Visual Studio).
 
-1. Clona el repositorio en tu máquina local y asegúrate de estar en la rama `frontend`.
-2. Abre una terminal e ingresa a la carpeta donde está alojado el código de React/Ionic ejecutando:
-   ```bash
-   cd timebank/frontend
-3. Una vez dentro del directorio correcto, instala las dependencias mediante:
-   ```bash
-   npm install
-4. Finalmente ejecuta el comando para levantar el servidor:
-   ```bash
-   ionic serve
+2. Levantar el proyecto
+
+Utilizaremos dos terminales para ejecutar ciertos comandos.
+
+**Terminal 1 (backend):**
+
+```bash
+npm config set ignore-scripts true
+Explicación: Bloqueamos la ejecución automática de scripts por motivos de seguridad.
+
+cd backend
+npm install
+npm run dev
+Explicación: Instala las dependencias y levanta el servidor en http://localhost:3000.
+```
+
+**Terminal 2 (frontend):**
+
+```bash
+cd frontend
+npm install
+ionic serve
+Explicación: Instala las dependencias y abre la aplicación en http://localhost:8100.
+Recuerda ignorar la sugerencia de actualizaciones para las versiones de las dependencias.
+```
+
+***Nota 1:*** El frontend utiliza Ionic 9, React 19 y React Router 6. **No actualices `react-router-dom` a la versión 7**: Ionic 9 requiere la versión 6.
+
+***Nota 2:*** Si el comando `ionic` no es reconocido, instala la interfaz de línea de comandos de Ionic: `npm install -g @ionic/cli`.
+
+***Nota 3:*** Se utilizara la version actual de Node.js (20 en adelante).
 
 ### El código del frontend esta en otra Branch (frontend)
 
