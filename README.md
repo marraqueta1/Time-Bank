@@ -211,20 +211,20 @@ Tendrá acceso a todas las funcionalidades relacionadas con el mercado de interc
 Será responsable de la moderación y estabilidad del sistema. Podrá consultar usuarios registrados, bloquear cuentas fraudulentas, revisar las disputas generadas en intercambios no concretados y administrar el catálogo global de habilidades. No participará en el mercado de trueques.
 
 ### Control de acceso a rutas
-La diferenciación por roles deberá aplicarse en la protección de rutas:
+El sistema utiliza React Router v6 junto con un servicio de autenticación (`auth.ts`) para proteger el acceso a las vistas. La diferenciación por roles se aplica de la siguiente manera:
 
-```text
-/login
-/registro
+* **Redirección de Raíz (`/`):** Al ingresar a la ruta base, el sistema verifica la sesión. Si no hay sesión, redirige a `/login`. Si el usuario está autenticado, verifica su rol y lo redirige automáticamente a `/admin` (si es administrador) o a `/app/feed` (si es usuario normal).
+* **Protección de Rutas (Acceso Denegado):** Las rutas de `/app/*` están protegidas por el componente `<ProtectedRoute>`. Si un usuario sin sesión intenta entrar a la fuerza ingresando la URL, es interceptado y enviado a `/login`.
+* **Control de Roles:** Si un usuario normal intenta acceder tipeando una ruta de administrador (ej: `/admin`), el sistema detecta que su rol no coincide con el array `allowedRoles` y lo expulsa redirigiéndolo de vuelta a su `/app/feed`.
+* **Ruta Inexistente (Error 404):** Se implementó una ruta comodín (`*`) que atrapa cualquier URL mal escrita o no registrada en el sistema, mostrando una vista de error 404.
 
-/app/feed
-/app/create
-/app/proposals
-/app/wallet
-
-/admin/dashboard
-/admin/usuarios
-```
+**Asignación de Rutas por Rol:**
+| Ruta | Rol Permitido |
+| :--- | :--- |
+| `/login`, `/registro` | Público (Sin sesión) |
+| `/app/feed`, `/app/create`, `/app/offers/:id`, `/app/proposals`, `/app/chat`, `/app/chat/:id`, `/app/wallet`, `/app/profile` | Usuario (Estudiante / Profesor) |
+| `/admin/dashboard`, `/admin/usuarios`, `/admin/categorias`, `/admin/reportes`, `/admin/estadisticas`, `/admin/configuracion` | Administrador |
+| `*` (Rutas no definidas) | Público (Redirige a 404) |
 
 ---
 
