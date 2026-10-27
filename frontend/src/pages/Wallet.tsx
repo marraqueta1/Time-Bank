@@ -44,8 +44,8 @@ const Wallet: React.FC = () => {
                   <h1 style={{ fontSize: '4rem', fontWeight: 'bold', margin: '10px 0 0 0' }}>45</h1>
                   <p style={{ margin: '0 0 25px 0', opacity: 0.9 }}>≈ $4.500 CLP en beneficios</p>
                   <div style={{ display: 'flex', gap: '10px' }}>
-                    <IonButton fill="outline" style={{ '--color': 'white', '--border-color': 'white', flex: 1 }}>Ganar más</IonButton>
-                    <IonButton style={{ '--background': 'white', '--color': '#d97706', flex: 1 }}>Canjear</IonButton>
+                  <IonButton routerLink="/app/feed" fill="outline" style={{ '--color': 'white', flex: 1 }}>Ganar más</IonButton>
+                  <IonButton onClick={() => alert('¡Beneficio canjeado exitosamente!')} style={{ '--background': 'white', '--color': '#d97706', flex: 1 }}>Canjear</IonButton>
                   </div>
                 </div>
               </IonCol>

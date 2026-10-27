@@ -1,7 +1,7 @@
 import React from 'react';
 import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Route, Navigate } from 'react-router-dom'; // Navigate reemplaza a Redirect
+import { Route, Navigate } from 'react-router-dom';
 
 /* Importación de componentes */
 import Login from './pages/Login';
@@ -37,18 +37,19 @@ const App: React.FC = () => (
         <MenuLateral />
         
         <IonRouterOutlet id="main-content">
-          {/* Rutas Públicas */}
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Register />} />
           <Route path="/" element={<Navigate to="/login" replace />} />
 
-          {/* Rutas Privadas */}
           <Route path="/app/feed" element={<Feed />} />
           <Route path="/app/crear" element={<CrearPublicacion />} />
           <Route path="/app" element={<Navigate to="/app/feed" replace />} />
           <Route path="/app/wallet" element={<Wallet />} />
           <Route path="/app/propuestas" element={<Propuestas />} />
-          <Route path="/app/oferta/:id" element={<DetalleOferta />} />
+          
+          {/* Aquí está la ruta corregida a offers */}
+          <Route path="/app/offers/:id" element={<DetalleOferta />} />
+          
           <Route path="/app/perfil" element={<Perfil />} />
           <Route path="/app/chats" element={<Chats />} />
         </IonRouterOutlet>

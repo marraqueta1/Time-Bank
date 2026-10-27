@@ -4,13 +4,9 @@ import { IonRouterOutlet } from '@ionic/react';
 import { authService } from '../services/auth';
 import ProtectedRoute from './ProtectedRoute';
 
-// Importamos tus páginas reales
+// Importamos el Login y tu TabsLayout (que ahora administrará todas las vistas internas)
 import Login from '../pages/Login';
-import Feed from '../pages/Feed';
-import DetalleOferta from '../pages/DetalleOferta';
-import Propuestas from '../pages/Propuestas';
-import Chats from '../pages/Chats';
-import Perfil from '../pages/Perfil';
+import TabsLayout from '../components/TabsLayout'; // Asegúrate de que la ruta a la carpeta components sea la correcta
 
 // 1. Componente mínimo para la vista 404
 const NotFound: React.FC = () => (
@@ -45,12 +41,12 @@ const AppRouter: React.FC = () => {
       {/* Ruta Pública */}
       <Route path="/login" element={<Login />} />
 
-      {/* Rutas Protegidas de Usuario */}
-      <Route path="/app/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
-      <Route path="/app/offers/:id" element={<ProtectedRoute><DetalleOferta /></ProtectedRoute>} />
-      <Route path="/app/proposals" element={<ProtectedRoute><Propuestas /></ProtectedRoute>} />
-      <Route path="/app/chat" element={<ProtectedRoute><Chats /></ProtectedRoute>} />
-      <Route path="/app/profile" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
+      {/* DELEGAMOS TODAS LAS RUTAS DE USUARIO AL TABSLAYOUT */}
+      <Route path="/app/*" element={
+        <ProtectedRoute>
+          <TabsLayout />
+        </ProtectedRoute>
+      } />
 
       {/* Ruta Protegida de Administrador */}
       <Route path="/admin" element={
@@ -62,6 +58,7 @@ const AppRouter: React.FC = () => {
       <Route path="/admin/reportes" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
       <Route path="/admin/estadisticas" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
       <Route path="/admin/configuracion" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
+      
       {/* Ruta 404 */}
       <Route path="*" element={<NotFound />} />
     </IonRouterOutlet>

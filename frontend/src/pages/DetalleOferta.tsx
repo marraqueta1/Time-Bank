@@ -12,7 +12,7 @@ const DetalleOferta: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <IonPage>
+    <IonPage className="ion-page ion-page-visible" style={{ opacity: 1, zIndex: 999 }}>
       {/* Header Móvil con botón de retroceso */}
       <IonHeader className="ion-no-border ion-hide-md-up">
         <IonToolbar>
@@ -108,7 +108,7 @@ const DetalleOferta: React.FC = () => {
                   <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#d97706', margin: '5px 0' }}>15 <span style={{ fontSize: '1rem', color: 'gray', fontWeight: 'normal' }}>puntos</span></h1>
                   <p style={{ color: 'gray', fontSize: '0.9rem', marginBottom: '20px' }}>Tu saldo: 45 pts</p>
 
-                  <IonButton expand="block" style={{ fontWeight: 'bold', '--border-radius': '8px', marginBottom: '10px' }} onClick={() => navigate('/app/propuestas')}>
+                  <IonButton expand="block" style={{ fontWeight: 'bold', '--border-radius': '8px', marginBottom: '10px' }} onClick={() => navigate('/app/proposals')}>
                     Enviar propuesta
                   </IonButton>
                   <IonButton expand="block" fill="outline" style={{ fontWeight: 'bold', '--border-radius': '8px', marginBottom: '20px' }}>

@@ -72,7 +72,6 @@ const MenuLateral: React.FC = () => {
           })}
         </IonList>
 
-        {/* Tarjeta de Saldo (Wallet) - Requisito del Figma */}
         <div style={{ padding: '20px', position: 'absolute', bottom: '60px', width: '100%' }}>
           <div style={{ background: '#fef3c7', borderRadius: '12px', padding: '15px', cursor: 'pointer' }} onClick={() => navigate('/app/wallet')}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#d97706', fontWeight: 'bold', fontSize: '0.9rem' }}>
@@ -85,7 +84,6 @@ const MenuLateral: React.FC = () => {
           </div>
         </div>
 
-        {/* Botón de cerrar sesión */}
         <div style={{ position: 'absolute', bottom: '10px', width: '100%', padding: '0 20px' }}>
           <IonButton fill="clear" color="medium" onClick={handleCerrarSesion} style={{ width: '100%', justifyContent: 'flex-start' }}>
             <IonIcon slot="start" icon={logOutOutline} />

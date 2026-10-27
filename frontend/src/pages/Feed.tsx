@@ -90,11 +90,14 @@ const Feed: React.FC = () => {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #eee', paddingTop: '12px' }}>
                 <strong style={{ color: '#d97706', fontSize: '1.1rem' }}>{oferta.puntos} pts</strong>
                 
-                {/* 3. Navegación al detalle */}
                 <IonButton 
                   size="small" 
                   fill={oferta.tipo === 'Sala' ? 'solid' : 'outline'}
-                  onClick={() => navigate(`/app/oferta/${oferta.id}`)}
+                  onClick={() => {
+                    if (oferta.tipo === 'Sala') navigate('/app/propuestas');
+                    else if (oferta.tipo === 'Busca') navigate('/app/chats');
+                    else navigate(`/app/offers/${oferta.id}`);
+                  }}
                 >
                   {oferta.tipo === 'Sala' ? 'Inscribirme' : oferta.tipo === 'Busca' ? 'Contactar' : 'Ver detalle'}
                 </IonButton>
