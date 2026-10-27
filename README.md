@@ -129,6 +129,8 @@ Sin una solución como la que proponemos, las consecuencias son claras:
 | `/admin/usuarios` | Gestión de usuarios | Permite consultar, administrar y aplicar bloqueos a los usuarios registrados. |
 | `/admin/categorias` | Gestión de categorías | Permite mantener organizado el buscador agregando o eliminando rubros de habilidades. |
 | `/admin/reportes` | Gestión de reportes | Permite revisar disputas y denuncias pendientes para tomar acciones disciplinarias. |
+| `/admin/estadisticas` | Estadísticas | Permite visualizar métricas de uso de la plataforma, volumen de trueques y crecimiento. |
+| `/admin/configuracion` | Configuración | Permite ajustar parámetros globales del sistema, reglas de intercambio y roles. |
 
 ### 2. Relaciones jerárquicas entre vistas
 La aplicación se organiza mediante una estructura jerárquica en la que las funcionalidades disponibles dependen del rol del usuario autenticado.
