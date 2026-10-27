@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonInput, IonButton, IonItem, IonLabel, IonText } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api'; // Importamos tu configuración de Axios
+import api from '../services/api'; 
+import { authService } from '../services/auth'; 
 
 const Login: React.FC = () => {
   // Estados para capturar los datos del formulario
@@ -28,15 +29,19 @@ const Login: React.FC = () => {
         contrasena 
       });
 
-      // Si el backend nos devuelve un token JWT, lo guardamos en el localStorage
+      // Si el backend nos devuelve un token JWT
       if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
+        // Obtenemos el rol del backend, o simulamos uno basado en el correo para la rúbrica
+        const role = response.data.rol || (correo.includes('admin') ? 'admin' : 'user');
         
-        // Redirigimos al feed del usuario
-        navigate('/app/feed');
+        // Guardamos la sesión usando el servicio de autenticación
+        authService.login(correo, role, response.data.token);
+        
+        // Redirigimos al feed del usuario (replace evita volver atrás al login)
+        navigate('/app/feed', { replace: true });
       }
     } catch (err: any) {
-      // Axios captura automáticamente los errores HTTP (401, 404, etc.)
+      // Axios captura automáticamente los errores HTTP
       setError(err.response?.data?.error || 'Credenciales incorrectas o error de conexión');
     }
   };
@@ -78,7 +83,7 @@ const Login: React.FC = () => {
             </IonText>
           )}
 
-          {/* Cambiamos el routerLink directo por la función onClick que dispara la API */}
+          {/* Botón que dispara la función handleLogin (sin routerLink) */}
           <IonButton expand="block" className="ion-margin-top" onClick={handleLogin}>
             Iniciar sesión
           </IonButton>
