@@ -8,13 +8,20 @@ const api = axios.create({
   }
 });
 
-
+// Interceptor de peticiones
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    // 1. Buscamos el paquete 'session' que guardó el authService
+    const sessionStr = localStorage.getItem('session');
     
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (sessionStr && config.headers) {
+      // 2. Lo abrimos (parseamos el JSON)
+      const sessionObj = JSON.parse(sessionStr);
+      
+      // 3. Sacamos el token y lo pegamos en la cabecera
+      if (sessionObj.token) {
+        config.headers.Authorization = `Bearer ${sessionObj.token}`;
+      }
     }
     return config;
   },
@@ -23,7 +30,7 @@ api.interceptors.request.use(
   }
 );
 
-
+// Interceptor de respuestas
 api.interceptors.response.use(
   (response) => {
     return response;
@@ -32,7 +39,8 @@ api.interceptors.response.use(
     if (error.response) {
       if (error.response.status === 401) {
         console.error('Error 401: No autorizado. Token JWT inválido o ausente.');
-        localStorage.removeItem('token');
+        // Si nos da error 401, borramos el paquete correcto ('session')
+        localStorage.removeItem('session'); 
       } else {
         console.error(`Error del Servidor (${error.response.status}):`, error.response.data);
       }

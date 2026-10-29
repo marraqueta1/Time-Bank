@@ -11,20 +11,19 @@ import Wallet from '../pages/Wallet';
 import Propuestas from '../pages/Propuestas'; 
 import Chats from '../pages/Chats'; 
 import Perfil from '../pages/Perfil'; 
-import DetalleOferta from '../pages/DetalleOferta'; // <-- LA RUTA QUE FALTABA
+import DetalleOferta from '../pages/DetalleOferta';
 
 const TabsLayout: React.FC = () => {
   return (
     <IonTabs>
       <IonRouterOutlet id="main-content">
+        {}
         <Route path="/app/feed" element={<Feed />} />
-        <Route path="/app/create" element={<CreateOffer />} />
+        <Route path="/app/crear" element={<CreateOffer />} />
         <Route path="/app/wallet" element={<Wallet />} />
-        <Route path="/app/proposals" element={<Propuestas />} />
-        <Route path="/app/chat" element={<Chats />} />
-        <Route path="/app/profile" element={<Perfil />} />
-        
-        {/* RUTA DE DETALLES */}
+        <Route path="/app/propuestas" element={<Propuestas />} />
+        <Route path="/app/chats" element={<Chats />} />
+        <Route path="/app/perfil" element={<Perfil />} />
         <Route path="/app/offers/:id" element={<DetalleOferta />} />
 
         <Route path="/app" element={<Navigate to="/app/feed" />} />
@@ -36,19 +35,20 @@ const TabsLayout: React.FC = () => {
           <IonIcon icon={home} />
           <IonLabel>Inicio</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="proposals" href="/app/proposals">
+        {}
+        <IonTabButton tab="propuestas" href="/app/propuestas">
           <IonIcon icon={swapHorizontal} />
           <IonLabel>Propuestas</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="create" href="/app/create">
+        <IonTabButton tab="crear" href="/app/crear">
           <IonIcon icon={addCircle} />
           <IonLabel>Crear</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="chat" href="/app/chat">
+        <IonTabButton tab="chats" href="/app/chats">
           <IonIcon icon={chatbubbles} />
-          <IonLabel>Chat</IonLabel>
+          <IonLabel>Chats</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="profile" href="/app/profile">
+        <IonTabButton tab="perfil" href="/app/perfil">
           <IonIcon icon={person} />
           <IonLabel>Perfil</IonLabel>
         </IonTabButton>

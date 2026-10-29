@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   IonMenu, IonHeader, IonContent, IonList, IonItem, 
   IonIcon, IonLabel, IonNote, IonButton 
@@ -12,6 +12,20 @@ import {
 const MenuLateral: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  
+  const [puntosTotales, setPuntosTotales] = useState(() => {
+    const saved = localStorage.getItem('userPoints');
+    return saved ? parseInt(saved, 10) : 45;
+  });
+
+  useEffect(() => {
+    const handlePointsChange = () => {
+      const saved = localStorage.getItem('userPoints');
+      if (saved) setPuntosTotales(parseInt(saved, 10));
+    };
+    window.addEventListener('pointsChanged', handlePointsChange);
+    return () => window.removeEventListener('pointsChanged', handlePointsChange);
+  }, []);
 
   if (location.pathname === '/login' || location.pathname === '/registro' || location.pathname === '/') {
     return null;
@@ -77,7 +91,7 @@ const MenuLateral: React.FC = () => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#d97706', fontWeight: 'bold', fontSize: '0.9rem' }}>
               <IonIcon icon={walletOutline} /> Saldo
             </div>
-            <h2 style={{ margin: '10px 0 5px 0', fontWeight: 'bold', color: '#92400e', fontSize: '1.8rem' }}>45 pts</h2>
+            <h2 style={{ margin: '10px 0 5px 0', fontWeight: 'bold', color: '#92400e', fontSize: '1.8rem' }}>{puntosTotales} pts</h2>
             <div style={{ fontSize: '0.8rem', color: '#b45309', fontWeight: 'bold' }}>
               Cómo ganar más →
             </div>

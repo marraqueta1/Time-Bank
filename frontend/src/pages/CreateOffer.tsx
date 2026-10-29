@@ -5,6 +5,7 @@ import {
   IonSegment, IonSegmentButton, IonText, IonRow, IonCol, IonGrid
 } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api'; // Importamos tu conexión al backend
 
 const CrearPublicacion: React.FC = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const CrearPublicacion: React.FC = () => {
   const [descripcion, setDescripcion] = useState('');
   const [duracion, setDuracion] = useState('');
   const [puntos, setPuntos] = useState('');
-  const [cupos, setCupos] = useState(''); // Solo para Salas
+  const [cupos, setCupos] = useState(''); 
   
   const [error, setError] = useState('');
 
@@ -34,19 +35,37 @@ const CrearPublicacion: React.FC = () => {
     }
   };
 
-  // 2. Validación y envío
-  const handlePublicar = () => {
+  // 2. Validación y envío REAL a la base de datos
+  const handlePublicar = async () => {
     if (!titulo || !categoria || !descripcion || !puntos) {
       setError('Por favor, completa todos los campos obligatorios (*).');
       return;
     }
     
-    // Aquí iría la llamada POST con Axios a tu API (ej: api.post('/ofertas', ...))
-    console.log("Publicando:", { tipo, titulo, categoria, modalidad, descripcion, duracion, puntos, cupos, diasSeleccionados });
-    
-    setError('');
-    alert('Publicación creada con éxito (Simulado)');
-    navigate('/app/feed');
+    try {
+      setError('');
+      
+      // Enviamos exactamente los datos que tu schema.prisma espera
+      await api.post('/ofertas', { 
+        titulo, 
+        categoria, 
+        descripcion, 
+        puntos: Number(puntos), 
+        tipo 
+      });
+      
+      alert('¡Publicación creada con éxito en la base de datos!');
+      
+      // Limpiamos los campos (opcional)
+      setTitulo('');
+      setCategoria('');
+      setDescripcion('');
+      setPuntos('');
+      
+      navigate('/app/feed');
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Hubo un error al conectar con el servidor.');
+    }
   };
 
   return (
@@ -119,7 +138,6 @@ const CrearPublicacion: React.FC = () => {
 
           <IonGrid className="ion-no-padding">
             <IonRow>
-              {/* La duración se oculta si el usuario solo está "Buscando algo" */}
               {tipo !== 'busco' && (
                 <IonCol size="12" sizeMd="6" style={{ paddingRight: '10px' }}>
                   <IonItem lines="none" style={{ border: '1px solid #ddd', borderRadius: '8px', marginBottom: '15px' }}>
@@ -136,7 +154,6 @@ const CrearPublicacion: React.FC = () => {
                 </IonItem>
               </IonCol>
 
-              {/* Si es Sala Grupal, mostramos el campo de Cupos */}
               {tipo === 'sala' && (
                 <IonCol size="12">
                   <IonItem lines="none" style={{ border: '1px solid #ddd', borderRadius: '8px', marginBottom: '15px' }}>
@@ -148,7 +165,6 @@ const CrearPublicacion: React.FC = () => {
             </IonRow>
           </IonGrid>
 
-          {/* Selector de días (Solo para ofertas 1-a-1 y salas) */}
           {tipo !== 'busco' && (
             <div style={{ marginBottom: '30px' }}>
               <IonLabel style={{ color: '#666', fontWeight: 'bold', display: 'block', marginBottom: '10px' }}>Días disponibles</IonLabel>

@@ -1,8 +1,22 @@
-import React from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonButton, IonIcon, IonCard, IonCardContent } from '@ionic/react';
+import React, { useState } from 'react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonButton, IonIcon, IonCard, IonCardContent, IonToast } from '@ionic/react';
 import { arrowDownOutline, arrowUpOutline, giftOutline, bookOutline, cafeOutline, ticketOutline, documentTextOutline } from 'ionicons/icons';
 
 const Wallet: React.FC = () => {
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  
+  const [puntosTotales, setPuntosTotales] = useState(() => {
+    const saved = localStorage.getItem('userPoints');
+    return saved ? parseInt(saved, 10) : 45;
+  });
+
+  const actualizarPuntosGlobales = (nuevosPuntos: number) => {
+    setPuntosTotales(nuevosPuntos);
+    localStorage.setItem('userPoints', nuevosPuntos.toString());
+    window.dispatchEvent(new Event('pointsChanged'));
+  };
+
   const movimientos = [
     { id: 1, titulo: 'Clase de Cálculo I', fecha: 'Hace 2 días - Rodrigo M.', puntos: 10, tipo: 'ingreso' },
     { id: 2, titulo: 'Sala de Python', fecha: 'Hace 5 días - Rodrigo M.', puntos: -15, tipo: 'egreso' },
@@ -15,6 +29,22 @@ const Wallet: React.FC = () => {
     { id: 3, titulo: 'Entrada evento', desc: 'Charla o workshop', puntos: 50, icon: ticketOutline, color: '#22c55e' },
     { id: 4, titulo: 'Certificado', desc: 'De horas de mentoría', puntos: 100, icon: documentTextOutline, color: '#f59e0b' }
   ];
+
+  const handleCanjear = (titulo: string, costo: number) => {
+    if (puntosTotales >= costo) {
+      actualizarPuntosGlobales(puntosTotales - costo);
+      setToastMessage(`¡Éxito! Has canjeado "${titulo}" por ${costo} puntos.`);
+    } else {
+      setToastMessage(`Saldo insuficiente para canjear "${titulo}". Necesitas ${costo} puntos.`);
+    }
+    setShowToast(true);
+  };
+
+  const handleGanarGratis = () => {
+    actualizarPuntosGlobales(puntosTotales + 10);
+    setToastMessage(`¡Felicidades! Has reclamado 10 puntos gratis.`);
+    setShowToast(true);
+  };
 
   return (
     <IonPage>
@@ -34,23 +64,25 @@ const Wallet: React.FC = () => {
 
           <IonGrid className="ion-no-padding">
             <IonRow>
-              {/* Tarjeta de Saldo Principal */}
               <IonCol size="12" sizeMd="5" style={{ paddingRight: '15px', marginBottom: '20px' }}>
                 <div style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', borderRadius: '16px', padding: '25px', color: 'white', boxShadow: '0 10px 15px -3px rgba(245, 158, 11, 0.4)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: '0.9rem', fontWeight: 'bold', letterSpacing: '1px' }}>SALDO DISPONIBLE</span>
                     <IonIcon icon={giftOutline} style={{ fontSize: '1.5rem' }} />
                   </div>
-                  <h1 style={{ fontSize: '4rem', fontWeight: 'bold', margin: '10px 0 0 0' }}>45</h1>
-                  <p style={{ margin: '0 0 25px 0', opacity: 0.9 }}>≈ $4.500 CLP en beneficios</p>
+                  
+                  <h1 style={{ fontSize: '4rem', fontWeight: 'bold', margin: '10px 0 0 0' }}>{puntosTotales}</h1>
+                  <p style={{ margin: '0 0 25px 0', opacity: 0.9 }}>
+                    ≈ ${(puntosTotales * 100).toLocaleString('es-CL')} CLP en beneficios
+                  </p>
+                  
                   <div style={{ display: 'flex', gap: '10px' }}>
-                  <IonButton routerLink="/app/feed" fill="outline" style={{ '--color': 'white', flex: 1 }}>Ganar más</IonButton>
-                  <IonButton onClick={() => alert('¡Beneficio canjeado exitosamente!')} style={{ '--background': 'white', '--color': '#d97706', flex: 1 }}>Canjear</IonButton>
+                    <IonButton onClick={handleGanarGratis} fill="outline" style={{ '--color': 'white', flex: 1 }}>+ Puntos Gratis</IonButton>
+                    <IonButton routerLink="/app/feed" style={{ '--background': 'white', '--color': '#d97706', flex: 1 }}>Ver Feed</IonButton>
                   </div>
                 </div>
               </IonCol>
 
-              {/* Movimientos Recientes */}
               <IonCol size="12" sizeMd="7">
                 <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginTop: 0 }}>Movimientos recientes</h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -74,7 +106,6 @@ const Wallet: React.FC = () => {
               </IonCol>
             </IonRow>
 
-            {/* Tarjetas de Beneficios */}
             <IonRow style={{ marginTop: '30px' }}>
               <IonCol size="12">
                 <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Canjea tus puntos</h2>
@@ -90,7 +121,12 @@ const Wallet: React.FC = () => {
                       <p style={{ margin: '5px 0 15px 0', color: 'gray', fontSize: '0.9rem', lineHeight: '1.2' }}>{ben.desc}</p>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <strong style={{ color: '#d97706' }}>{ben.puntos} pts</strong>
-                        <span style={{ color: '#2563eb', fontWeight: 'bold', fontSize: '0.9rem', cursor: 'pointer' }}>Canjear</span>
+                        <span 
+                          onClick={() => handleCanjear(ben.titulo, ben.puntos)}
+                          style={{ color: '#2563eb', fontWeight: 'bold', fontSize: '0.9rem', cursor: 'pointer', padding: '5px' }}
+                        >
+                          Canjear
+                        </span>
                       </div>
                     </IonCardContent>
                   </IonCard>
@@ -100,6 +136,16 @@ const Wallet: React.FC = () => {
           </IonGrid>
 
         </div>
+
+        <IonToast
+          isOpen={showToast}
+          onDidDismiss={() => setShowToast(false)}
+          message={toastMessage}
+          duration={3000}
+          color="dark"
+          position="bottom"
+        />
+
       </IonContent>
     </IonPage>
   );

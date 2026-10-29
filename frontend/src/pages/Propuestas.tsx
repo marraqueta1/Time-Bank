@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { 
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent, 
-  IonSegment, IonSegmentButton, IonLabel, IonBadge, IonButton, IonIcon 
+  IonSegment, IonSegmentButton, IonLabel, IonBadge, IonButton, IonIcon,
+  useIonRouter 
 } from '@ionic/react';
 import { swapHorizontalOutline } from 'ionicons/icons';
 
 const Propuestas: React.FC = () => {
+  const router = useIonRouter();
   const [tab, setTab] = useState('recibidas');
 
   return (
@@ -28,15 +30,16 @@ const Propuestas: React.FC = () => {
             <IonSegmentButton value="recibidas">
               <IonLabel>Recibidas (2)</IonLabel>
             </IonSegmentButton>
+            {/* Aquí quitamos el (3) */}
             <IonSegmentButton value="enviadas">
-              <IonLabel>Enviadas (3)</IonLabel>
+              <IonLabel>Enviadas</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton value="historial">
               <IonLabel>Historial</IonLabel>
             </IonSegmentButton>
           </IonSegment>
 
-          {/* Tarjeta 1: Propuesta Pendiente */}
+          {/* Tarjeta 1: Propuesta Pendiente (Sofía) */}
           {tab === 'recibidas' && (
             <div style={{ background: 'white', borderRadius: '12px', border: '1px solid #eee', padding: '20px', marginBottom: '20px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -65,14 +68,21 @@ const Propuestas: React.FC = () => {
               </div>
 
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                <IonButton style={{ '--border-radius': '8px', flex: '1 1 auto' }}>Aceptar propuesta</IonButton>
-                <IonButton fill="outline" style={{ '--border-radius': '8px', flex: '1 1 auto' }}>Contraofertar</IonButton>
-                <IonButton fill="clear" color="medium" style={{ flex: '0 1 auto' }}>Rechazar</IonButton>
+                <IonButton style={{ '--border-radius': '8px', flex: '1 1 auto' }}>Aceptar Propuesta</IonButton>
+                <IonButton fill="outline" style={{ '--border-radius': '8px', flex: '1 1 auto' }}>Rechazar Propuesta</IonButton>
+                <IonButton 
+                  fill="clear" 
+                  color="medium" 
+                  style={{ flex: '0 1 auto' }}
+                  onClick={() => router.push('/app/chats?contacto=sofia')}
+                >
+                  Chat
+                </IonButton>
               </div>
             </div>
           )}
 
-          {/* Tarjeta 2: Contraoferta */}
+          {/* Tarjeta 2: Contraoferta (Diego) */}
           {tab === 'recibidas' && (
             <div style={{ background: 'white', borderRadius: '12px', border: '1px solid #eee', padding: '20px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -92,8 +102,20 @@ const Propuestas: React.FC = () => {
               </div>
 
               <div style={{ display: 'flex', gap: '10px' }}>
-                <IonButton style={{ '--border-radius': '8px' }}>Responder en chat</IonButton>
-                <IonButton fill="clear" color="medium">Ver detalles</IonButton>
+                <IonButton 
+                  style={{ '--border-radius': '8px' }}
+                  onClick={() => router.push('/app/chats?contacto=diego')}
+                >
+                  Responder en chat
+                </IonButton>
+                
+                <IonButton 
+                  fill="clear" 
+                  color="medium"
+                  onClick={() => router.push('/app/offers/2')}
+                >
+                  Ver detalles
+                </IonButton>
               </div>
             </div>
           )}
