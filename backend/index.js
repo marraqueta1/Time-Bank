@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cors = require('cors');
 const { PrismaClient } = require('@prisma/client');
@@ -18,11 +17,27 @@ app.get('/', (req, res) => {
     res.json({ mensaje: '¡API de TimeBank funcionando correctamente!' });
 });
 
-
+// ==========================================
+// RUTAS DE AUTENTICACIÓN Y REGISTRO (EP 2.5 y 2.6)
+// ==========================================
 app.post('/api/usuarios', async (req, res) => {
     try {
         const { nombre, correo, contrasena } = req.body;
         
+        // VALIDACIÓN DE INPUTS
+        if (!nombre || !correo || !contrasena) {
+            return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(correo)) {
+            return res.status(400).json({ error: 'El formato del correo no es válido.' });
+        }
+
+        if (contrasena.length < 6) {
+            return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres.' });
+        }
+
         const salt = await bcrypt.genSalt(10);
         const contrasenaEncriptada = await bcrypt.hash(contrasena, salt);
 
@@ -36,13 +51,20 @@ app.post('/api/usuarios', async (req, res) => {
         
         res.status(201).json({ mensaje: 'Usuario creado con éxito' });
     } catch (error) {
-        res.status(400).json({ error: 'Error al crear el usuario. El correo podría ya estar registrado.' });
+        if (error.code === 'P2002') {
+            return res.status(409).json({ error: 'Este correo ya está registrado.' });
+        }
+        res.status(500).json({ error: 'Error interno al crear el usuario.' });
     }
 });
 
 app.post('/api/usuarios/login', async (req, res) => {
     try {
         const { correo, contrasena } = req.body;
+
+        if (!correo || !contrasena) {
+            return res.status(400).json({ error: 'Por favor, ingresa correo y contraseña.' });
+        }
 
         const usuario = await prisma.usuario.findUnique({ where: { correo } });
         if (!usuario) {
@@ -55,7 +77,7 @@ app.post('/api/usuarios/login', async (req, res) => {
         }
 
         const token = jwt.sign(
-            { id: usuario.id, correo: usuario.correo }, 
+            { id: usuario.id, correo: usuario.correo, rol: usuario.rol }, 
             JWT_SECRET, 
             { expiresIn: '24h' }
         );
@@ -70,15 +92,10 @@ app.post('/api/usuarios/login', async (req, res) => {
     }
 });
 
-
-
-// ... (Aquí irían los GET, PUT y DELETE para usuarios, servicios y transacciones, siguiendo la misma estructura de manejo de errores y validación de JWT)
-
 // ==========================================
-// MIDDLEWARE DE SEGURIDAD (Verifica el Token)
+// MIDDLEWARES DE SEGURIDAD Y ROLES
 // ==========================================
 const verificarToken = (req, res, next) => {
-    // El token llega en el formato: "Bearer eyJhbGci..."
     const token = req.header('Authorization')?.split(' ')[1];
     
     if (!token) {
@@ -87,18 +104,30 @@ const verificarToken = (req, res, next) => {
 
     try {
         const verificado = jwt.verify(token, JWT_SECRET);
-        req.usuario = verificado; // Guardamos el ID del usuario en la petición
-        next(); // El token es válido, continúa a la ruta
+        req.usuario = verificado; 
+        next(); 
     } catch (error) {
-        res.status(400).json({ error: 'Token inválido o expirado.' });
+        res.status(403).json({ error: 'Token inválido o expirado.' });
+    }
+};
+
+const verificarAdmin = async (req, res, next) => {
+    try {
+        const usuario = await prisma.usuario.findUnique({ where: { id: req.usuario.id } });
+        
+        if (!usuario || usuario.rol !== 'admin') {
+            return res.status(403).json({ error: 'Acceso denegado. Se requieren permisos de administrador.' });
+        }
+        
+        next();
+    } catch (error) {
+        res.status(500).json({ error: 'Error al verificar los permisos del usuario.' });
     }
 };
 
 // ==========================================
 // RUTAS PARA PUBLICACIONES (OFERTAS)
 // ==========================================
-
-// 1. CREAR una nueva publicación
 app.post('/api/ofertas', verificarToken, async (req, res) => {
     try {
         const { titulo, descripcion, categoria, puntos, tipo } = req.body;
@@ -110,24 +139,21 @@ app.post('/api/ofertas', verificarToken, async (req, res) => {
                 categoria,
                 puntos: parseInt(puntos),
                 tipo,
-                creadorId: req.usuario.id // Sacamos el ID directamente del token de seguridad
+                creadorId: req.usuario.id 
             }
         });
         
         res.status(201).json({ mensaje: 'Publicación creada con éxito', oferta: nuevaOferta });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ error: 'Error al crear la publicación en la base de datos' });
     }
 });
 
-// 2. MODIFICAR una publicación existente
 app.put('/api/ofertas/:id', verificarToken, async (req, res) => {
     try {
         const ofertaId = parseInt(req.params.id);
         const { titulo, descripcion, categoria, puntos, tipo } = req.body;
 
-        // Primero verificamos que la oferta exista y que el usuario sea el dueño
         const oferta = await prisma.oferta.findUnique({ where: { id: ofertaId } });
         
         if (!oferta) return res.status(404).json({ error: 'Publicación no encontrada' });
@@ -146,18 +172,15 @@ app.put('/api/ofertas/:id', verificarToken, async (req, res) => {
     }
 });
 
-// 3. ELIMINAR una publicación
 app.delete('/api/ofertas/:id', verificarToken, async (req, res) => {
     try {
         const ofertaId = parseInt(req.params.id);
 
-        // Buscamos la oferta y los datos del usuario que intenta borrar
         const oferta = await prisma.oferta.findUnique({ where: { id: ofertaId } });
         const usuarioActual = await prisma.usuario.findUnique({ where: { id: req.usuario.id } });
         
         if (!oferta) return res.status(404).json({ error: 'Publicación no encontrada' });
 
-        // La regla de oro: Solo pasa si es el creador O si tiene rol 'admin'
         if (oferta.creadorId !== req.usuario.id && usuarioActual.rol !== 'admin') {
             return res.status(403).json({ error: 'No tienes permiso de administrador para borrar esto' });
         }
@@ -169,30 +192,25 @@ app.delete('/api/ofertas/:id', verificarToken, async (req, res) => {
     }
 });
 
-// 4. LEER todas las publicaciones (Para el Feed/Inicio)
 app.get('/api/ofertas', verificarToken, async (req, res) => {
     try {
         const ofertas = await prisma.oferta.findMany({
-            orderBy: { fechaCreacion: 'desc' }, // Mostramos las más nuevas primero
+            orderBy: { fechaCreacion: 'desc' }, 
             include: {
                 creador: {
-                    select: { nombre: true } // Traemos el nombre de la persona que lo creó
+                    select: { nombre: true } 
                 }
             }
         });
         res.json(ofertas);
     } catch (error) {
-        console.error(error);
         res.status(500).json({ error: 'Error al obtener las publicaciones' });
     }
 });
 
-
 // ==========================================
 // RUTAS PARA EL PERFIL DE USUARIO
 // ==========================================
-
-// 1. OBTENER los datos del perfil del usuario logueado
 app.get('/api/usuarios/perfil', verificarToken, async (req, res) => {
     try {
         const usuario = await prisma.usuario.findUnique({
@@ -205,7 +223,6 @@ app.get('/api/usuarios/perfil', verificarToken, async (req, res) => {
                 rol: true,
                 descripcion: true,
                 fotoUrl: true
-                // No seleccionamos la contraseña por seguridad
             }
         });
         
@@ -216,7 +233,6 @@ app.get('/api/usuarios/perfil', verificarToken, async (req, res) => {
     }
 });
 
-// 2. ACTUALIZAR el perfil (Nombre, Descripción y Foto)
 app.put('/api/usuarios/perfil', verificarToken, async (req, res) => {
     try {
         const { nombre, descripcion, fotoUrl } = req.body;
@@ -228,7 +244,7 @@ app.put('/api/usuarios/perfil', verificarToken, async (req, res) => {
                 descripcion, 
                 fotoUrl 
             },
-            select: { id: true, nombre: true, descripcion: true, fotoUrl: true } // Devolvemos solo lo actualizado
+            select: { id: true, nombre: true, descripcion: true, fotoUrl: true } 
         });
 
         res.json({ mensaje: 'Perfil actualizado con éxito', usuario: usuarioActualizado });
