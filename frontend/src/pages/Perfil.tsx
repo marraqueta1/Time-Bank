@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent, 
   IonGrid, IonRow, IonCol, IonButton, IonBadge,
-  IonSegment, IonSegmentButton, IonLabel, IonCard, IonCardContent,
+  IonSegment, IonSegmentButton, IonLabel, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
   IonModal, IonItem, IonInput, IonTextarea, IonButtons, useIonViewWillEnter
 } from '@ionic/react';
+import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
 const Perfil: React.FC = () => {
-  const [tab, setTab] = useState('ofertas');
+  const [tab, setTab] = useState('inscripciones');
+  const [inscripciones, setInscripciones] = useState<any[]>([]);
+  const navigate = useNavigate();
   
-  // 1. Estados para los datos del usuario que vienen de la Base de Datos
   const [usuario, setUsuario] = useState({
     nombre: 'Cargando...',
     correo: '',
@@ -20,13 +22,11 @@ const Perfil: React.FC = () => {
     rol: 'usuario'
   });
 
-  // Estados para el Modal de Edición
   const [mostrarModal, setMostrarModal] = useState(false);
   const [nombreEdit, setNombreEdit] = useState('');
   const [descripcionEdit, setDescripcionEdit] = useState('');
   const [fotoUrlEdit, setFotoUrlEdit] = useState('');
 
-  // 2. Función para cargar los datos desde el backend
   const cargarPerfil = async () => {
     try {
       const response = await api.get('/usuarios/perfil');
@@ -41,21 +41,20 @@ const Perfil: React.FC = () => {
         rol: data.rol
       });
 
-      // Pre-llenamos el formulario de edición con los datos actuales
       setNombreEdit(data.nombre);
       setDescripcionEdit(data.descripcion || '');
       setFotoUrlEdit(data.fotoUrl || '');
     } catch (error) {
-      console.error('Error al cargar el perfil:', error);
+      console.error(error);
     }
   };
 
-  // Se ejecuta cada vez que el usuario entra a esta pestaña
   useIonViewWillEnter(() => {
     cargarPerfil();
+    const guardadas = JSON.parse(localStorage.getItem('inscripciones') || '[]');
+    setInscripciones(guardadas);
   });
 
-  // 3. Función para guardar los cambios en la Base de Datos
   const guardarCambios = async () => {
     try {
       await api.put('/usuarios/perfil', {
@@ -65,9 +64,9 @@ const Perfil: React.FC = () => {
       });
       
       setMostrarModal(false);
-      cargarPerfil(); // Recargamos para ver los cambios instantáneamente
+      cargarPerfil(); 
     } catch (error) {
-      console.error('Error al guardar el perfil:', error);
+      console.error(error);
       alert('Hubo un error al actualizar tus datos.');
     }
   };
@@ -88,7 +87,6 @@ const Perfil: React.FC = () => {
           <div style={{ background: 'white', borderRadius: '16px', padding: '25px', boxShadow: '0 4px 10px rgba(0,0,0,0.05)', border: '1px solid #eee' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '15px' }}>
               
-              {/* Bloque de Foto y Nombre Dinámicos */}
               <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
                 <div style={{ 
                   background: usuario.fotoUrl ? `url(${usuario.fotoUrl}) center/cover` : '#3b82f6', 
@@ -97,7 +95,6 @@ const Perfil: React.FC = () => {
                   fontSize: '2.5rem', fontWeight: 'bold', border: '4px solid white', 
                   boxShadow: '0 2px 5px rgba(0,0,0,0.1)' 
                 }}>
-                  {/* Si no hay foto, mostramos la inicial del nombre */}
                   {!usuario.fotoUrl && usuario.nombre.charAt(0).toUpperCase()}
                 </div>
                 <div>
@@ -141,25 +138,59 @@ const Perfil: React.FC = () => {
               </IonRow>
             </IonGrid>
 
-            {/* Medallas simuladas por ahora */}
             <div style={{ display: 'flex', gap: '10px', marginTop: '25px' }}>
               <IonBadge style={{ background: '#fef3c7', color: '#d97706', padding: '6px 10px' }}>🏆 Gurú</IonBadge>
             </div>
           </div>
 
           <IonSegment value={tab} onIonChange={e => setTab(e.detail.value as string)} style={{ marginTop: '30px', marginBottom: '20px' }}>
+            <IonSegmentButton value="inscripciones"><IonLabel>Inscripciones</IonLabel></IonSegmentButton>
             <IonSegmentButton value="ofertas"><IonLabel>Ofertas activas</IonLabel></IonSegmentButton>
             <IonSegmentButton value="salas"><IonLabel>Salas creadas</IonLabel></IonSegmentButton>
           </IonSegment>
 
-          {/* ... Aquí va la lista de ofertas (la dejamos igual que tu diseño original) ... */}
+          {tab === 'inscripciones' && (
+            <div style={{ marginTop: '20px' }}>
+              {inscripciones.length === 0 ? (
+                <div className="ion-text-center" style={{ color: 'gray', padding: '20px' }}>
+                  No te has inscrito en ninguna sala aún.
+                </div>
+              ) : (
+                inscripciones.map((inscripcion: any) => (
+                  <IonCard key={inscripcion.id} style={{ borderRadius: '12px', margin: '0 0 15px 0', boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
+                    <IonCardHeader>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <IonBadge color="success">Inscrito</IonBadge>
+                        <IonBadge color="tertiary">Sala Grupal</IonBadge>
+                      </div>
+                      <IonCardTitle style={{ fontSize: '1.2rem', fontWeight: 'bold', marginTop: '10px' }}>
+                        {inscripcion.titulo}
+                      </IonCardTitle>
+                      <IonCardSubtitle>
+                        Profesor: {inscripcion.creador?.nombre || 'Usuario'}
+                      </IonCardSubtitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <p>{inscripcion.descripcion}</p>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+                        <IonButton 
+                          size="small" 
+                          fill="outline" 
+                          onClick={() => navigate(`/app/offers/${inscripcion.id}`)}
+                        >
+                          Ver detalle
+                        </IonButton>
+                      </div>
+                    </IonCardContent>
+                  </IonCard>
+                ))
+              )}
+            </div>
+          )}
           
         </div>
       </IonContent>
 
-      {/* ========================================== */}
-      {/* MODAL PARA EDITAR EL PERFIL */}
-      {/* ========================================== */}
       <IonModal isOpen={mostrarModal} onDidDismiss={() => setMostrarModal(false)} initialBreakpoint={0.75} breakpoints={[0, 0.75, 1]}>
         <IonHeader className="ion-no-border">
           <IonToolbar>
@@ -206,7 +237,6 @@ const Perfil: React.FC = () => {
           </div>
         </IonContent>
       </IonModal>
-
     </IonPage>
   );
 };
