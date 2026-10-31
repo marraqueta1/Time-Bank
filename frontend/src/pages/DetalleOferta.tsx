@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent, 
   IonGrid, IonRow, IonCol, IonButton, IonIcon, IonBadge, 
@@ -6,36 +6,65 @@ import {
 } from '@ionic/react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { desktopOutline, timeOutline, pricetagOutline, calendarOutline, star, shieldCheckmarkOutline, bookmarkOutline } from 'ionicons/icons';
-
-// Base de datos simulada de ofertas
-const mockOffers = [
-  {
-    id: '1',
-    creator: { name: 'Rodrigo Martínez', initial: 'R', color: '#a855f7', rating: 4.8, reviews: 12, role: 'PROFESOR' },
-    category: 'Programación',
-    title: 'Introducción a Python desde cero',
-    description: 'Aprende los fundamentos de Python: variables, tipos de datos, condicionales, bucles y funciones. Ideal para quienes nunca han programado. Incluye ejercicios prácticos y material de apoyo.',
-    details: { mode: 'Online', duration: '60 min', cost: '15 pts', available: 'Lun-Vie' },
-    review: { author: 'Ana S.', text: '"Excelente explicación, muy paciente. Aprendí mucho en una sola sesión."' }
-  },
-  {
-    id: '2',
-    creator: { name: 'Diego Fuentes', initial: 'D', color: '#0ea5e9', rating: 4.9, reviews: 8, role: 'ESTUDIANTE' },
-    category: 'Diseño Web',
-    title: 'Clase práctica de HTML y CSS',
-    description: 'Aprende a maquetar desde cero. Revisaremos la estructura semántica de HTML5 y los fundamentos de CSS3 (Flexbox y Grid). Perfecto para empezar a construir tus propias páginas web.',
-    details: { mode: 'Online', duration: '60 min', cost: '20 pts', available: 'Mar-Jue' },
-    review: { author: 'Carlos V.', text: '"Muy buena disposición, resolvió todas mis dudas sobre Flexbox."' }
-  }
-];
+import api from '../services/api';
 
 const DetalleOferta: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [oferta, setOferta] = useState<any>(null);
+  const [cargando, setCargando] = useState(true);
 
-  const oferta = useMemo(() => {
-    return mockOffers.find(o => o.id === id) || mockOffers[0];
+  useEffect(() => {
+    const fetchDetalle = async () => {
+      try {
+        const response = await api.get('/ofertas');
+        const encontrada = response.data.find((o: any) => o.id.toString() === id);
+        setOferta(encontrada);
+      } catch (error) {
+        console.error("Error cargando el detalle de la oferta:", error);
+      } finally {
+        setCargando(false);
+      }
+    };
+    fetchDetalle();
   }, [id]);
+
+  if (cargando) {
+    return (
+      <IonPage>
+        <IonHeader className="ion-no-border ion-hide-md-up">
+          <IonToolbar>
+            <IonButtons slot="start"><IonBackButton defaultHref="/app/feed" /></IonButtons>
+            <IonTitle>Cargando...</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent className="ion-padding ion-text-center">
+          <p style={{ marginTop: '50px', color: 'gray' }}>Buscando información de la oferta...</p>
+        </IonContent>
+      </IonPage>
+    );
+  }
+
+  if (!oferta) {
+    return (
+      <IonPage>
+        <IonHeader className="ion-no-border ion-hide-md-up">
+          <IonToolbar>
+            <IonButtons slot="start"><IonBackButton defaultHref="/app/feed" /></IonButtons>
+            <IonTitle>Error</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent className="ion-padding ion-text-center">
+          <p style={{ marginTop: '50px', color: 'red' }}>No se encontró la oferta solicitada.</p>
+          <IonButton onClick={() => navigate('/app/feed')}>Volver al inicio</IonButton>
+        </IonContent>
+      </IonPage>
+    );
+  }
+
+  const tipoVisual = oferta.tipo === '1-a-1' ? 'PROFESOR' : oferta.tipo === 'sala' ? 'SALA' : 'ESTUDIANTE';
+  const nombreAutor = oferta.creador?.nombre || 'Usuario';
+  const inicial = nombreAutor.charAt(0).toUpperCase();
 
   return (
     <IonPage className="ion-page ion-page-visible" style={{ opacity: 1, zIndex: 999 }}>
@@ -64,34 +93,34 @@ const DetalleOferta: React.FC = () => {
                 <div style={{ background: 'white', borderRadius: '16px', padding: '25px', border: '1px solid #eee' }}>
                   
                   <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
-                    <div style={{ background: oferta.creator.color, color: 'white', width: '50px', height: '50px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', fontWeight: 'bold' }}>
-                      {oferta.creator.initial}
+                    <div style={{ background: '#a855f7', color: 'white', width: '50px', height: '50px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', fontWeight: 'bold' }}>
+                      {inicial}
                     </div>
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <h2 style={{ margin: 0, fontWeight: 'bold', fontSize: '1.2rem' }}>{oferta.creator.name}</h2>
-                        <IonBadge color={oferta.creator.role === 'PROFESOR' ? 'tertiary' : 'primary'}>{oferta.creator.role}</IonBadge>
+                        <h2 style={{ margin: 0, fontWeight: 'bold', fontSize: '1.2rem' }}>{nombreAutor}</h2>
+                        <IonBadge color={oferta.tipo === 'sala' ? 'tertiary' : 'primary'}>{tipoVisual}</IonBadge>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: 'gray', fontSize: '0.9rem', marginTop: '5px' }}>
-                        <IonIcon icon={star} style={{ color: '#f59e0b' }} /> {oferta.creator.rating} · {oferta.creator.reviews} reseñas
+                        <IonIcon icon={star} style={{ color: '#f59e0b' }} /> 5.0 · 0 reseñas
                       </div>
                     </div>
                   </div>
 
-                  <IonBadge color="light" style={{ color: '#2563eb', background: '#eff6ff', marginBottom: '15px' }}>{oferta.category}</IonBadge>
+                  <IonBadge color="light" style={{ color: '#2563eb', background: '#eff6ff', marginBottom: '15px' }}>{oferta.categoria}</IonBadge>
                   
-                  <h1 style={{ fontSize: '1.8rem', fontWeight: 'bold', marginTop: '0' }}>{oferta.title}</h1>
+                  <h1 style={{ fontSize: '1.8rem', fontWeight: 'bold', marginTop: '0' }}>{oferta.titulo}</h1>
                   <p style={{ color: '#444', fontSize: '1.05rem', lineHeight: '1.6', marginBottom: '30px' }}>
-                    {oferta.description}
+                    {oferta.descripcion}
                   </p>
 
                   <IonGrid className="ion-no-padding" style={{ marginBottom: '30px' }}>
                     <IonRow>
                       {[
-                        { icon: desktopOutline, title: 'Modalidad', value: oferta.details.mode },
-                        { icon: timeOutline, title: 'Duración', value: oferta.details.duration },
-                        { icon: pricetagOutline, title: 'Costo', value: oferta.details.cost, color: '#d97706', bg: '#fef3c7' },
-                        { icon: calendarOutline, title: 'Disponible', value: oferta.details.available }
+                        { icon: desktopOutline, title: 'Modalidad', value: 'Online' },
+                        { icon: timeOutline, title: 'Duración', value: '60 min' },
+                        { icon: pricetagOutline, title: 'Costo', value: `${oferta.puntos} pts`, color: '#d97706', bg: '#fef3c7' },
+                        { icon: calendarOutline, title: 'Disponible', value: 'Lun-Vie' }
                       ].map((item, i) => (
                         <IonCol size="6" sizeMd="3" key={i} style={{ padding: '5px' }}>
                           <div style={{ background: item.bg || '#f9fafb', border: '1px solid #eee', borderRadius: '12px', padding: '15px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -106,22 +135,6 @@ const DetalleOferta: React.FC = () => {
                     </IonRow>
                   </IonGrid>
 
-                  <hr style={{ border: 'none', borderTop: '1px solid #eee', margin: '30px 0' }} />
-                  
-                  <h3 style={{ fontWeight: 'bold' }}>Reseñas de estudiantes</h3>
-                  <div style={{ background: '#f9fafb', padding: '15px', borderRadius: '12px', marginTop: '15px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                      <div style={{ background: '#22c55e', color: 'white', width: '30px', height: '30px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {oferta.review.author.charAt(0)}
-                      </div>
-                      <strong style={{ fontSize: '0.9rem' }}>{oferta.review.author}</strong>
-                      <div style={{ display: 'flex', color: '#f59e0b', fontSize: '0.8rem' }}>
-                        <IonIcon icon={star} /><IonIcon icon={star} /><IonIcon icon={star} /><IonIcon icon={star} /><IonIcon icon={star} />
-                      </div>
-                    </div>
-                    <p style={{ margin: 0, color: '#555', fontStyle: 'italic', fontSize: '0.9rem' }}>{oferta.review.text}</p>
-                  </div>
-
                 </div>
               </IonCol>
 
@@ -129,16 +142,15 @@ const DetalleOferta: React.FC = () => {
                 <div style={{ background: 'white', borderRadius: '16px', padding: '25px', border: '1px solid #eee', position: 'sticky', top: '20px' }}>
                   <span style={{ color: 'gray', fontSize: '0.9rem' }}>Costo de esta sesión</span>
                   <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#d97706', margin: '5px 0' }}>
-                    {oferta.details.cost.replace(' pts', '')} <span style={{ fontSize: '1rem', color: 'gray', fontWeight: 'normal' }}>puntos</span>
+                    {oferta.puntos} <span style={{ fontSize: '1rem', color: 'gray', fontWeight: 'normal' }}>puntos</span>
                   </h1>
                   <p style={{ color: 'gray', fontSize: '0.9rem', marginBottom: '20px' }}>Tu saldo: 45 pts</p>
 
-                  {/* EL CAMBIO: Extraemos el primer nombre y lo enviamos al chat */}
                   <IonButton 
                     expand="block" 
                     style={{ fontWeight: 'bold', '--border-radius': '8px', marginBottom: '10px' }} 
                     onClick={() => {
-                      const nombreContacto = oferta.creator.name.split(' ')[0].toLowerCase();
+                      const nombreContacto = nombreAutor.split(' ')[0].toLowerCase();
                       navigate(`/app/chats?contacto=${nombreContacto}`);
                     }}
                   >
