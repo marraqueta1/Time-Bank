@@ -18,13 +18,42 @@ const MenuLateral: React.FC = () => {
     return saved ? parseInt(saved, 10) : 45;
   });
 
+  const [propuestasPendientes, setPropuestasPendientes] = useState(0);
+
+  const actualizarBadgePropuestas = () => {
+    const guardadas = localStorage.getItem('propuestasState');
+    if (guardadas) {
+      const propuestas = JSON.parse(guardadas);
+      const pendientes = propuestas.filter((p: any) => p.tipo === 'recibida').length;
+      setPropuestasPendientes(pendientes);
+    } else {
+      // Si no hay datos, asumimos las 2 iniciales (Sofia y Diego)
+      setPropuestasPendientes(2);
+    }
+  };
+
   useEffect(() => {
+    // Al cargar el menú, leemos cuántas pendientes hay
+    actualizarBadgePropuestas();
+
+    // Escuchamos los cambios en puntos
     const handlePointsChange = () => {
       const saved = localStorage.getItem('userPoints');
       if (saved) setPuntosTotales(parseInt(saved, 10));
     };
+
+    // Escuchamos los cambios en las propuestas
+    const handleProposalsChange = () => {
+      actualizarBadgePropuestas();
+    };
+
     window.addEventListener('pointsChanged', handlePointsChange);
-    return () => window.removeEventListener('pointsChanged', handlePointsChange);
+    window.addEventListener('proposalsChanged', handleProposalsChange);
+
+    return () => {
+      window.removeEventListener('pointsChanged', handlePointsChange);
+      window.removeEventListener('proposalsChanged', handleProposalsChange);
+    };
   }, []);
 
   if (location.pathname === '/login' || location.pathname === '/registro' || location.pathname === '/') {
@@ -34,7 +63,7 @@ const MenuLateral: React.FC = () => {
   const menuItems = [
     { title: 'Inicio', path: '/app/feed', icon: homeOutline },
     { title: 'Crear', path: '/app/crear', icon: addCircleOutline },
-    { title: 'Propuestas', path: '/app/propuestas', icon: documentTextOutline, badge: '3' },
+    { title: 'Propuestas', path: '/app/propuestas', icon: documentTextOutline, badge: propuestasPendientes > 0 ? propuestasPendientes.toString() : undefined },
     { title: 'Chats', path: '/app/chats', icon: chatbubblesOutline },
     { title: 'Perfil', path: '/app/perfil', icon: personOutline },
     { title: 'Mi Wallet', path: '/app/wallet', icon: walletOutline }
