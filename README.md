@@ -412,6 +412,66 @@ Este proyecto implementa registro de usuarios, autenticación mediante JWT. **No
 | Comunicación |  |
 | Configuración CORS |  |
 
+## 5. Preparación y ejecución local del proyecto
+
+### Requisitos
+
+- Node.js y npm: Versión 20 o superior recomendada.
+- Base de datos: PostgreSQL o MySQL en ejecución local o remota.
+- Ionic CLI: Instalado globalmente mediante `npm install -g @ionic/cli`.
+- Repositorio: Copia local del proyecto clonada desde GitHub
+
+### Configuración de la base de datos
+
+El proyecto utiliza Prisma ORM para la gestión de la base de datos, lo que permite un manejo más seguro mediante variables de entorno, evitando credenciales embebidas en el codigo,
+
+1. En la carpeta backend, crea un archivo .env basándote en el archivo de ejemplo (crea un .env.example en tu repositorio sin secretos).
+2. Configura tu cadena de conexión en el .env
+3. Aplica las migraciones y genera el cliente de Prisma:
+
+   ```bash
+    cd backend
+    npx prisma generate
+    npx prisma migrate dev
+    ```
+   
+   > Aunque Prisma gestiona la estructura, se incluye un archivo .sql exportado en la carpeta prisma/migrations/20261008195738_unit
+
+### Iniciar el Backend
+
+Desde la raíz del proyecto, abre una terminal:
+
+   ```bash
+    npm config set ignore-scripts true
+    Explicación: Bloqueamos la ejecución automática de scripts por motivos de seguridad.
+    
+    cd backend
+    npm install
+    npm run dev
+    Explicación: Instala las dependencias y levanta el servidor en http://localhost:3000.
+```
+
+### Iniciar el Frontend (Ionic + React)
+
+En una nueva terminal, desde la raíz del proyecto: 
+ 
+ ```bash
+    cd frontend
+    npm install
+    ionic serve
+    Explicación: Instala las dependencias y abre la aplicación en http://localhost:8100.
+    Recuerda ignorar la sugerencia de actualizaciones para las versiones de las dependencias.
+ ```
+
+### Problemas frecuentes
+| Síntoma | Qué revisar |
+|---|---|
+| Prisma Client no encuentra la tabla | Ejecutar npx prisma generate y verificar que la migración se aplicó en la base de datos correcta.|
+| Error de conexión a DB (ECONNREFUSED)| Verificar que el servicio PostgreSQL/MySQL esté activo, puerto correcto y credenciales válidas en el `.env`. |
+| ECONNREFUSED en frontend (Axios/Fetch) | Asegurarse de que el backend esté ejecutándose en el puerto 3000 y la URL base de la API sea la correcta en el frontend. |
+| 401 Token no proporcionado | Validar que el frontend envíe la cabecera `Authorization: Bearer <token>` tras el inicio de sesión|
+| 403 Token inválido o expirado |El token caducó o la firma es incorrecta. Forzar un nuevo inicio de sesión en la app.|
+| Errores CORS | Verificar que el paquete cors esté habilitado en el app.js/index.js del backend y permita solicitudes desde http://localhost:8100.|
 
 ## Arquitectura
 ```text
