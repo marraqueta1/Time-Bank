@@ -398,6 +398,21 @@ El uso de una arquitectura basada en componentes modulares con Ionic y React Rou
 ## Bocetos UI/UX
 [Figma - Prototipo de UI/UX](https://www.figma.com/design/wL91AmcXIUWYASwxa2QKNe/Diseño-UI-UX--Community-?node-id=0-1&p=f&t=wQqFvR5lZ5YBtsvj-0)
 
+## Descripción
+Este proyecto implementa registro de usuarios, autenticación mediante JWT. **Node.js, Express y MySQL**; el frontend esta desarrollado con  **Ionic + React**
+
+## Tecnologías
+
+| Capa | Tecnología identificada en el ZIP |
+|---|---|
+| Frontend | Ionic 9 + React 19 + React Router 6 + TypeScript |
+| Backend | Node.js + Express 5 |
+| Base de datos |  |
+| Autenticación |  |
+| Comunicación |  |
+| Configuración CORS |  |
+
+
 ## Arquitectura
 ```text
 Time-Bank/
