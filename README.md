@@ -3,11 +3,19 @@
 **TimeBank** es una plataforma educativa adaptativa diseñada para el intercambio de habilidades y micro-recursos mediante una economía colaborativa basada en horas.
 
 ### Integrantes y Responsabilidades
-*   **Daniel Serey:** 
-*   **Carlos Sagardia:** 
-*   **Felipe Morales:** 
-*   **Byron Vazquez:** 
+**Nombre del equipo:** [Completar]  
+**Integrantes:** Daniel Serey, Carlos Sagardia, Felipe Morales y Byron Vásquez   
+**Repositorio público:** [https://github.com/marraqueta1/Time-Bank]  
+**Rama frontend:** [https://github.com/marraqueta1/Time-Bank/tree/frontend]  
+**Rama backend:** [https://github.com/marraqueta1/Time-Bank/tree/backend]  
+**Figma:** [URL del prototipo público]
 
+| Integrante | Responsabilidad | Evidencia de colaboración |
+|---|---|---|
+| Daniel Serey | [Módulo] | [Commits o PR] |
+| Carlos Sagardia | [Módulo] | [Commits o PR] |
+| Felipe Morales | [Módulo] | [Commits o PR] |
+| Byron Vásquez | [Módulo] | [Commits o PR] |
 
 1. Descarga el repositorio en tu máquina local y abre con tu entorno de desarrollo (Visual Studio).
 
@@ -389,3 +397,70 @@ El uso de una arquitectura basada en componentes modulares con Ionic y React Rou
 
 ## Bocetos UI/UX
 [Figma - Prototipo de UI/UX](https://www.figma.com/design/wL91AmcXIUWYASwxa2QKNe/Diseño-UI-UX--Community-?node-id=0-1&p=f&t=wQqFvR5lZ5YBtsvj-0)
+
+## Arquitectura
+```text
+Time-Bank/
+├── Readme.md
+├── backend/   
+│   ├── node_modules/
+│   ├── prisma/
+|   |   ├── migrations/
+|   |   |   ├── 20262008195738_unit/
+|   |   |   |   └── migration.sql
+|   |   |   └── migration_lock.toml
+|   |   └── shema.prisma
+│   ├── .env
+│   ├── .gitignore
+│   ├── index.js
+│   ├── package-lock.json
+│   └── package.json
+└── frontend/
+    ├── .vscode/
+    |   └── extensions.json
+    ├── cypress/
+    ├── public/
+    ├── .browserslistrc
+    ├── .gitignore
+    ├── capacitor.config.ts
+    ├── cypress.config.ts
+    ├── eslint.config.js
+    ├── index.html
+    ├── ionic.config.json
+    ├── package-lock.json
+    ├── package.json
+    ├── tsconfig.json
+    ├── tsconfig.nose.json
+    ├── vite.config.ts
+    └── src/
+        ├── companents/
+        ├── pages/
+        |   ├── Chats.tsx
+        |   ├── CreateOffer.tsx
+        |   ├── DetalleOferta.tsx
+        |   ├── Feed.tsx
+        |   ├── Home.css
+        |   ├── Home.tsx
+        |   ├── Login.tsx
+        |   ├── Perfil.tsx
+        |   ├── Propuestas.tsx
+        |   ├── Register.tsx
+        |   └── Wallet.tsx
+        ├── routes
+        ├── services
+        ├── theme
+        ├── App.test.tsx
+        ├── App.tsx
+        ├── main.tsx
+        ├── setupTests.ts
+        └── vite-env.d.ts
+```
+
+### Base de datos
+
+## Pruebas funcionales y evidencia EP2
+
+## Modelo relacional
+
+
+
