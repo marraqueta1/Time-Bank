@@ -514,22 +514,6 @@ En una nueva terminal, desde la raíz del proyecto:
 | 403 Token inválido o expirado |El token caducó o la firma es incorrecta. Forzar un nuevo inicio de sesión en la app.|
 | Errores CORS | Verificar que el paquete cors esté habilitado en el app.js/index.js del backend y permita solicitudes desde http://localhost:8100.|
 
-Para asegurar la plataforma y corregir vulnerabilidades comunes, se ha implementado las siguientes medidas
-| Control EP2 | En este proyecto | Cambio necesario |
-|---|---|---|
-| JWT con expiración | Sí, `expiresIn: '1h'` | Mantener, firmar claims mínimos |
-| Rutas protegidas en backend | Solo `/users/profile` | Proteger recursos según permisos |
-| Roles diferenciados | No | Modelo de roles, middleware y pruebas de autorización |
-| bcrypt | No | `bcrypt.hash` en registro y `bcrypt.compare` en login |
-| Secretos en variables de entorno | No | Mover `JWT_SECRET` y credenciales MySQL a `.env` (no versionarlo) |
-| Validación de entradas | Parcial | Validación estructurada de todos los campos |
-| Prevención de SQL injection | Consultas con parámetros para búsqueda | Revisar todas las consultas y evitar SQL construido por concatenación |
-| Minimización de datos | No | No devolver contraseñas en endpoints ni JWT |
-| Protección de rutas frontend | No se identifica guard en el enrutador | Implementar guardias en Ionic React y gestionar expiración |
-| Manejo de errores | Parcial | Mensajes seguros y códigos HTTP coherentes |
-## Integración frontend–backend
-
-
 ## Pruebas funcionales y evidencia 
 Para validar los endpoints RESTful, se genero una colección de pruebas para evidenciar los excenarios exitosos y de 
 
