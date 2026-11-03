@@ -44,9 +44,8 @@
     - [Iniciar el Backend](#iniciar-el-Backend)
     - [Iniciar el Frontend (Ionic + React)](#iniciar-el-Frontend-(Ionic-+-React))
     - [Problemas frecuentes](#problemas-frecuentes)
-10. [Seguridad](#seguridad)
-11. [Integración frontend–backend](#integración-frontend–backend)
-12. [Pruebas funcionales y evidencia](#pruebas-funcionales-y-evidencia)
+10. [Integración frontend–backend](#integración-frontend–backend)
+11. [Pruebas funcionales y evidencia](#pruebas-funcionales-y-evidencia)
 
 
 
@@ -514,9 +513,20 @@ En una nueva terminal, desde la raíz del proyecto:
 | 401 Token no proporcionado | Validar que el frontend envíe la cabecera `Authorization: Bearer <token>` tras el inicio de sesión|
 | 403 Token inválido o expirado |El token caducó o la firma es incorrecta. Forzar un nuevo inicio de sesión en la app.|
 | Errores CORS | Verificar que el paquete cors esté habilitado en el app.js/index.js del backend y permita solicitudes desde http://localhost:8100.|
-## Seguridad
 
 Para asegurar la plataforma y corregir vulnerabilidades comunes, se ha implementado las siguientes medidas
+| Control EP2 | En este proyecto | Cambio necesario |
+|---|---|---|
+| JWT con expiración | Sí, `expiresIn: '1h'` | Mantener, firmar claims mínimos |
+| Rutas protegidas en backend | Solo `/users/profile` | Proteger recursos según permisos |
+| Roles diferenciados | No | Modelo de roles, middleware y pruebas de autorización |
+| bcrypt | No | `bcrypt.hash` en registro y `bcrypt.compare` en login |
+| Secretos en variables de entorno | No | Mover `JWT_SECRET` y credenciales MySQL a `.env` (no versionarlo) |
+| Validación de entradas | Parcial | Validación estructurada de todos los campos |
+| Prevención de SQL injection | Consultas con parámetros para búsqueda | Revisar todas las consultas y evitar SQL construido por concatenación |
+| Minimización de datos | No | No devolver contraseñas en endpoints ni JWT |
+| Protección de rutas frontend | No se identifica guard en el enrutador | Implementar guardias en Ionic React y gestionar expiración |
+| Manejo de errores | Parcial | Mensajes seguros y códigos HTTP coherentes |
 ## Integración frontend–backend
 
 
@@ -538,7 +548,5 @@ Para validar los endpoints RESTful, se genero una colección de pruebas para evi
 | P11 | Editar Oferta | 200 | <img width="1095" height="869" alt="post11" src="https://github.com/user-attachments/assets/779b1196-03a9-4593-b530-39152decd3cb" />
 | P12 | Eliminar Oferta | 200 | <img width="1095" height="734" alt="post12" src="https://github.com/user-attachments/assets/8fc3780d-8efe-4cf9-88f0-816c99d7db92" />
 | P13 | Acceso de rol no autorizado | 403 | <img width="1092" height="794" alt="post13" src="https://github.com/user-attachments/assets/13a67d06-c460-4a9e-996d-d4fef90c116d" />
-## Modelo relacional
-
 
 
