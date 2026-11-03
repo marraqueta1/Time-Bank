@@ -21,36 +21,6 @@
 
 2. Levantar el proyecto
 
-Utilizaremos dos terminales para ejecutar ciertos comandos.
-
-**Terminal 1 (backend):**
-
-```bash
-npm config set ignore-scripts true
-Explicación: Bloqueamos la ejecución automática de scripts por motivos de seguridad.
-
-cd backend
-npm install
-npm run dev
-Explicación: Instala las dependencias y levanta el servidor en http://localhost:3000.
-```
-
-**Terminal 2 (frontend):**
-
-```bash
-cd frontend
-npm install
-ionic serve
-Explicación: Instala las dependencias y abre la aplicación en http://localhost:8100.
-Recuerda ignorar la sugerencia de actualizaciones para las versiones de las dependencias.
-```
-
-***Nota 1:*** El frontend utiliza Ionic 9, React 19 y React Router 6. **No actualices `react-router-dom` a la versión 7**: Ionic 9 requiere la versión 6.
-
-***Nota 2:*** Si el comando `ionic` no es reconocido, instala la interfaz de línea de comandos de Ionic: `npm install -g @ionic/cli`.
-
-***Nota 3:*** Se utilizara la version actual de Node.js (20 en adelante).
-
 ### El código del frontend esta en otra Branch (frontend)
 
 ## Índice
@@ -412,7 +382,65 @@ Este proyecto implementa registro de usuarios, autenticación mediante JWT. **No
 | Comunicación |  |
 | Configuración CORS |  |
 
-## 5. Preparación y ejecución local del proyecto
+## Arquitectura
+```text
+Time-Bank/
+├── Readme.md
+├── backend/   
+│   ├── node_modules/
+│   ├── prisma/
+|   |   ├── migrations/
+|   |   |   ├── 20262008195738_unit/
+|   |   |   |   └── migration.sql
+|   |   |   └── migration_lock.toml
+|   |   └── shema.prisma
+│   ├── .env
+│   ├── .gitignore
+│   ├── index.js
+│   ├── package-lock.json
+│   └── package.json
+└── frontend/
+    ├── .vscode/
+    |   └── extensions.json
+    ├── cypress/
+    ├── public/
+    ├── .browserslistrc
+    ├── .gitignore
+    ├── capacitor.config.ts
+    ├── cypress.config.ts
+    ├── eslint.config.js
+    ├── index.html
+    ├── ionic.config.json
+    ├── package-lock.json
+    ├── package.json
+    ├── tsconfig.json
+    ├── tsconfig.nose.json
+    ├── vite.config.ts
+    └── src/
+        ├── companents/
+        ├── pages/
+        |   ├── Chats.tsx
+        |   ├── CreateOffer.tsx
+        |   ├── DetalleOferta.tsx
+        |   ├── Feed.tsx
+        |   ├── Home.css
+        |   ├── Home.tsx
+        |   ├── Login.tsx
+        |   ├── Perfil.tsx
+        |   ├── Propuestas.tsx
+        |   ├── Register.tsx
+        |   └── Wallet.tsx
+        ├── routes
+        ├── services
+        ├── theme
+        ├── App.test.tsx
+        ├── App.tsx
+        ├── main.tsx
+        ├── setupTests.ts
+        └── vite-env.d.ts
+```
+
+## Preparación y ejecución local del proyecto
 
 ### Requisitos
 
@@ -472,64 +500,7 @@ En una nueva terminal, desde la raíz del proyecto:
 | 401 Token no proporcionado | Validar que el frontend envíe la cabecera `Authorization: Bearer <token>` tras el inicio de sesión|
 | 403 Token inválido o expirado |El token caducó o la firma es incorrecta. Forzar un nuevo inicio de sesión en la app.|
 | Errores CORS | Verificar que el paquete cors esté habilitado en el app.js/index.js del backend y permita solicitudes desde http://localhost:8100.|
-
-## Arquitectura
-```text
-Time-Bank/
-├── Readme.md
-├── backend/   
-│   ├── node_modules/
-│   ├── prisma/
-|   |   ├── migrations/
-|   |   |   ├── 20262008195738_unit/
-|   |   |   |   └── migration.sql
-|   |   |   └── migration_lock.toml
-|   |   └── shema.prisma
-│   ├── .env
-│   ├── .gitignore
-│   ├── index.js
-│   ├── package-lock.json
-│   └── package.json
-└── frontend/
-    ├── .vscode/
-    |   └── extensions.json
-    ├── cypress/
-    ├── public/
-    ├── .browserslistrc
-    ├── .gitignore
-    ├── capacitor.config.ts
-    ├── cypress.config.ts
-    ├── eslint.config.js
-    ├── index.html
-    ├── ionic.config.json
-    ├── package-lock.json
-    ├── package.json
-    ├── tsconfig.json
-    ├── tsconfig.nose.json
-    ├── vite.config.ts
-    └── src/
-        ├── companents/
-        ├── pages/
-        |   ├── Chats.tsx
-        |   ├── CreateOffer.tsx
-        |   ├── DetalleOferta.tsx
-        |   ├── Feed.tsx
-        |   ├── Home.css
-        |   ├── Home.tsx
-        |   ├── Login.tsx
-        |   ├── Perfil.tsx
-        |   ├── Propuestas.tsx
-        |   ├── Register.tsx
-        |   └── Wallet.tsx
-        ├── routes
-        ├── services
-        ├── theme
-        ├── App.test.tsx
-        ├── App.tsx
-        ├── main.tsx
-        ├── setupTests.ts
-        └── vite-env.d.ts
-```
+## Seguridad
 
 ## Pruebas funcionales y evidencia 
 Para validar los endpoints RESTful, se genero una colección de pruebas para evidenciar los excenarios exitosos y de 
