@@ -531,10 +531,24 @@ Time-Bank/
         └── vite-env.d.ts
 ```
 
-### Base de datos
+## Pruebas funcionales y evidencia 
+Para validar los endpoints RESTful, se genero una colección de pruebas para evidenciar los excenarios exitosos y de 
 
-## Pruebas funcionales y evidencia EP2
-
+| ID | Petición / escenario | HTTP esperado* | Evidencia |
+|---|---|---|---|
+| P01 | Registrar usuario válido | 201 | <img width="1078" height="715" alt="post1" src="https://github.com/user-attachments/assets/69a6eeda-9ef7-4160-8b47-ce217015fc93" />
+| P02 | Registrar correo repetido | 409 | <img width="1089" height="724" alt="post2" src="https://github.com/user-attachments/assets/e06bc7bc-3081-48f3-8155-b231f5c79aae" />
+| P03 | Iniciar sesión válida | 200 | <img width="1098" height="741" alt="post3" src="https://github.com/user-attachments/assets/28e7beed-2b0c-4f44-a4d0-26681e22590d" />
+| P04 | Login sin credenciales | 400 | <img width="1091" height="728" alt="post4" src="https://github.com/user-attachments/assets/27983ec7-464f-4d2d-9a0d-3a9323052231" />
+| P05 | Login con contraseña incorrecta | 401 | <img width="1082" height="774" alt="post5" src="https://github.com/user-attachments/assets/8b675e62-5d53-4d2f-8917-dd0e409407b1" />
+| P06 | Perfil sin token | 401 | <img width="1096" height="770" alt="post6" src="https://github.com/user-attachments/assets/1dfacb5b-958e-475a-bd89-04a482b23d07" />
+| P07 | Perfil con token inválido | 403 | <img width="1090" height="691" alt="post7" src="https://github.com/user-attachments/assets/cf5f5630-a5bb-4b91-bbde-745f386325aa" />
+| P08 | Perfil con token válido | 500 | <img width="1097" height="784" alt="post8" src="https://github.com/user-attachments/assets/da012d97-59c1-4cb8-9de6-738c0ad1796d" />
+| P09 | Crear Oferta | 201 | <img width="1086" height="861" alt="post9" src="https://github.com/user-attachments/assets/c51d5ad4-5a81-46b0-9c83-3a1c6e9389ea" />
+| P10 | Leer Ofertas | 200 | <img width="1089" height="941" alt="post10" src="https://github.com/user-attachments/assets/fff86c36-4991-47ba-82c2-4ec41c262f50" />
+| P11 | Editar Oferta | 200 | <img width="1095" height="869" alt="post11" src="https://github.com/user-attachments/assets/779b1196-03a9-4593-b530-39152decd3cb" />
+| P12 | Eliminar Oferta | 200 | <img width="1095" height="734" alt="post12" src="https://github.com/user-attachments/assets/8fc3780d-8efe-4cf9-88f0-816c99d7db92" />
+| P13 | Acceso de rol no autorizado | 403 | <img width="1092" height="794" alt="post13" src="https://github.com/user-attachments/assets/13a67d06-c460-4a9e-996d-d4fef90c116d" />
 ## Modelo relacional
 
 
