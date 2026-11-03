@@ -3,7 +3,7 @@
 **TimeBank** es una plataforma educativa adaptativa diseñada para el intercambio de habilidades y micro-recursos mediante una economía colaborativa basada en horas.
 
 ### Integrantes y Responsabilidades
-**Nombre del equipo:** [Completar]  
+**Nombre del equipo:** TimeBank  
 **Integrantes:** Daniel Serey, Carlos Sagardia, Felipe Morales y Byron Vásquez   
 **Repositorio público:** [https://github.com/marraqueta1/Time-Bank]  
 **Rama frontend:** [https://github.com/marraqueta1/Time-Bank/tree/frontend]  
