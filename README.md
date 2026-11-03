@@ -35,6 +35,9 @@
     - [Puntos críticos de interacción](#puntos-críticos-de-interacción)
     - [Justificación Técnica](#justificación-técnica)
 5. [Bocetos UX/UI](#bocetos-uiux)
+6. [Descripción](#descripción)
+7. Tecnologias
+8.  
 
 ---
 
@@ -501,6 +504,10 @@ En una nueva terminal, desde la raíz del proyecto:
 | 403 Token inválido o expirado |El token caducó o la firma es incorrecta. Forzar un nuevo inicio de sesión en la app.|
 | Errores CORS | Verificar que el paquete cors esté habilitado en el app.js/index.js del backend y permita solicitudes desde http://localhost:8100.|
 ## Seguridad
+
+Para asegurar la plataforma y corregir vulnerabilidades comunes, se ha implementado las siguientes medidas
+## Integración frontend–backend
+
 
 ## Pruebas funcionales y evidencia 
 Para validar los endpoints RESTful, se genero una colección de pruebas para evidenciar los excenarios exitosos y de 
