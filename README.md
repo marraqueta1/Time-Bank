@@ -36,8 +36,19 @@
     - [Justificación Técnica](#justificación-técnica)
 5. [Bocetos UX/UI](#bocetos-uiux)
 6. [Descripción](#descripción)
-7. Tecnologias
-8.  
+7. [Tecnologías](#tecnologías)
+8. [Arquitectura](#arquitectura)
+9. [Preparación y ejecución local del proyecto](#preparación-y-ejecución-local-del-proyecto)
+    - [Requisitos](#requisitos)
+    - [Configuración de la base de datos](#configuración-de-la-base-de-datos)
+    - [Iniciar el Backend](#iniciar-el-Backend)
+    - [Iniciar el Frontend (Ionic + React)](#iniciar-el-Frontend-(Ionic-+-React))
+    - [Problemas frecuentes](#problemas-frecuentes)
+10. [Seguridad](#seguridad)
+11. [Integración frontend–backend](#integración-frontend–backend)
+12. [Pruebas funcionales y evidencia](#pruebas-funcionales-y-evidencia)
+
+
 
 ---
 
