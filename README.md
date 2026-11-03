@@ -377,10 +377,10 @@ Este proyecto implementa registro de usuarios, autenticación mediante JWT. **No
 |---|---|
 | Frontend | Ionic 9 + React 19 + React Router 6 + TypeScript |
 | Backend | Node.js + Express 5 |
-| Base de datos |  |
-| Autenticación |  |
+| Base de datos | PostgresSQl / MySQL mediante Prisma ORM |
+| Autenticación | `jsonwebtoken` y cifrado `bcrypt` |
 | Comunicación |  |
-| Configuración CORS |  |
+| Configuración CORS | Paquete `cors` |
 
 ## Arquitectura
 ```text
