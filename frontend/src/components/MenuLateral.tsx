@@ -8,55 +8,60 @@ import {
   homeOutline, addCircleOutline, documentTextOutline, 
   chatbubblesOutline, personOutline, walletOutline, logOutOutline 
 } from 'ionicons/icons';
+import api from '../services/api';
 
 const MenuLateral: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  const [puntosTotales, setPuntosTotales] = useState(() => {
-    const saved = localStorage.getItem('userPoints');
-    return saved ? parseInt(saved, 10) : 45;
-  });
+  const [puntosTotales, setPuntosTotales] = useState<number>(0);
+  const [propuestasPendientes, setPropuestasPendientes] = useState<number>(0);
 
-  const [propuestasPendientes, setPropuestasPendientes] = useState(0);
+  const esRutaPublica =
+    location.pathname === '/login' ||
+    location.pathname === '/registro' ||
+    location.pathname === '/';
 
-  const actualizarBadgePropuestas = () => {
-    const guardadas = localStorage.getItem('propuestasState');
-    if (guardadas) {
-      const propuestas = JSON.parse(guardadas);
-      const pendientes = propuestas.filter((p: any) => p.tipo === 'recibida').length;
-      setPropuestasPendientes(pendientes);
-    } else {
-      // Si no hay datos, asumimos las 2 iniciales (Sofia y Diego)
-      setPropuestasPendientes(2);
+  const cargarDatosMenu = async () => {
+    if (esRutaPublica) return;
+
+    try {
+      const [resPerfil, resPropuestas] = await Promise.all([
+        api.get('/usuarios/perfil'),
+        api.get('/propuestas')
+      ]);
+
+      const perfil = resPerfil.data;
+      const propuestas = resPropuestas.data || [];
+
+      setPuntosTotales(perfil.saldo ?? 0);
+
+      const pendientes = propuestas.filter(
+        (p: any) => p.oferta?.creadorId === perfil.id && p.estado === 'pendiente'
+      );
+      setPropuestasPendientes(pendientes.length);
+    } catch (error) {
+      console.error('Error cargando datos del menú:', error);
     }
   };
 
   useEffect(() => {
-    // Al cargar el menú, leemos cuántas pendientes hay
-    actualizarBadgePropuestas();
+    cargarDatosMenu();
 
-    // Escuchamos los cambios en puntos
-    const handlePointsChange = () => {
-      const saved = localStorage.getItem('userPoints');
-      if (saved) setPuntosTotales(parseInt(saved, 10));
+    const handleActualizar = () => {
+      cargarDatosMenu();
     };
 
-    // Escuchamos los cambios en las propuestas
-    const handleProposalsChange = () => {
-      actualizarBadgePropuestas();
-    };
-
-    window.addEventListener('pointsChanged', handlePointsChange);
-    window.addEventListener('proposalsChanged', handleProposalsChange);
+    window.addEventListener('pointsChanged', handleActualizar);
+    window.addEventListener('proposalsChanged', handleActualizar);
 
     return () => {
-      window.removeEventListener('pointsChanged', handlePointsChange);
-      window.removeEventListener('proposalsChanged', handleProposalsChange);
+      window.removeEventListener('pointsChanged', handleActualizar);
+      window.removeEventListener('proposalsChanged', handleActualizar);
     };
-  }, []);
+  }, [location.pathname]);
 
-  if (location.pathname === '/login' || location.pathname === '/registro' || location.pathname === '/') {
+  if (esRutaPublica) {
     return null;
   }
 
@@ -71,6 +76,8 @@ const MenuLateral: React.FC = () => {
 
   const handleCerrarSesion = () => {
     localStorage.removeItem('token');
+    setPuntosTotales(0);
+    setPropuestasPendientes(0);
     navigate('/login');
   };
 
@@ -92,8 +99,8 @@ const MenuLateral: React.FC = () => {
             return (
               <IonItem 
                 key={index} 
-                routerLink={item.path} 
-                routerDirection="none"
+                button
+                onClick={() => navigate(item.path)}
                 style={{
                   '--background': isActive ? '#eff6ff' : 'transparent',
                   '--color': isActive ? '#2563eb' : '#666',
