@@ -18,6 +18,11 @@ const Register: React.FC = () => {
       return;
     }
 
+    if (contrasena.length < 8) {
+      setError('La contraseña es muy corta, necesita 8 o más caracteres.');
+      return;
+    }
+
     try {
       setError('');
       setMensajeExito('');
@@ -35,7 +40,12 @@ const Register: React.FC = () => {
       }, 2000);
 
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Hubo un problema al registrar la cuenta.');
+      const detalles = err.response?.data?.detalles;
+      if (Array.isArray(detalles) && detalles.length > 0) {
+        setError(detalles[0]);
+      } else {
+        setError(err.response?.data?.error || 'Hubo un problema al registrar la cuenta.');
+      }
     }
   };
 
@@ -74,7 +84,7 @@ const Register: React.FC = () => {
             <IonLabel position="floating">Contraseña</IonLabel>
             <IonInput 
               type="password"
-              placeholder="Mínimo 6 caracteres"
+              placeholder="Mínimo 8 caracteres"
               value={contrasena}
               onIonInput={(e: any) => setContrasena(e.target.value)}
             ></IonInput>
