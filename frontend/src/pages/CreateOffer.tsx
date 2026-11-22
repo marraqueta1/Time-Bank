@@ -5,15 +5,13 @@ import {
   IonSegment, IonSegmentButton, IonText, IonRow, IonCol, IonGrid
 } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api'; // Importamos tu conexión al backend
+import api from '../services/api';
 
 const CrearPublicacion: React.FC = () => {
   const navigate = useNavigate();
   
-  // 1. Estado principal para cambiar el formulario dinámicamente
   const [tipo, setTipo] = useState<'1-a-1' | 'sala' | 'busco'>('1-a-1');
 
-  // Estados de los campos del formulario
   const [titulo, setTitulo] = useState('');
   const [categoria, setCategoria] = useState('');
   const [modalidad, setModalidad] = useState('');
@@ -35,36 +33,50 @@ const CrearPublicacion: React.FC = () => {
     }
   };
 
-  // 2. Validación y envío REAL a la base de datos
   const handlePublicar = async () => {
     if (!titulo || !categoria || !descripcion || !puntos) {
       setError('Por favor, completa todos los campos obligatorios (*).');
       return;
     }
+
+    if (tipo === 'sala') {
+      const cupoNum = Number(cupos);
+      if (!cupos || isNaN(cupoNum) || cupoNum < 2 || cupoNum > 100) {
+        setError('Ingresa un límite de cupos válido para la sala (entre 2 y 100 personas).');
+        return;
+      }
+    }
     
     try {
       setError('');
       
-      // Enviamos exactamente los datos que tu schema.prisma espera
       await api.post('/ofertas', { 
         titulo, 
         categoria, 
         descripcion, 
         puntos: Number(puntos), 
-        tipo 
+        tipo,
+        cupoMaximo: tipo === 'sala' ? Number(cupos) : null
       });
       
       alert('¡Publicación creada con éxito en la base de datos!');
       
-      // Limpiamos los campos (opcional)
       setTitulo('');
       setCategoria('');
+      setModalidad('');
       setDescripcion('');
+      setDuracion('');
       setPuntos('');
+      setCupos('');
       
       navigate('/app/feed');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Hubo un error al conectar con el servidor.');
+      const detalles = err.response?.data?.detalles;
+      if (Array.isArray(detalles) && detalles.length > 0) {
+        setError(detalles[0]);
+      } else {
+        setError(err.response?.data?.error || 'Hubo un error al conectar con el servidor.');
+      }
     }
   };
 
@@ -84,7 +96,6 @@ const CrearPublicacion: React.FC = () => {
             <p style={{ color: 'gray' }}>Elige el tipo y completa la información</p>
           </div>
 
-          {/* Selector Dinámico */}
           <IonSegment 
             value={tipo} 
             onIonChange={(e) => setTipo(e.detail.value as any)}
@@ -101,12 +112,12 @@ const CrearPublicacion: React.FC = () => {
             </IonSegmentButton>
           </IonSegment>
 
-          {/* Formulario que cambia según el tipo */}
           <IonItem lines="none" style={{ border: '1px solid #ddd', borderRadius: '8px', marginBottom: '15px' }}>
             <IonLabel position="stacked" style={{ color: '#666' }}>Título *</IonLabel>
             <IonInput 
               placeholder={tipo === 'busco' ? "Ej: Necesito ayuda con Cálculo" : "Ej: Introducción a Python"}
-              value={titulo} onIonInput={(e: any) => setTitulo(e.target.value)} 
+              value={titulo} 
+              onIonInput={(e) => setTitulo(e.detail.value ?? '')} 
             />
           </IonItem>
 
@@ -115,13 +126,13 @@ const CrearPublicacion: React.FC = () => {
               <IonCol size="12" sizeMd="6" style={{ paddingRight: '10px' }}>
                 <IonItem lines="none" style={{ border: '1px solid #ddd', borderRadius: '8px', marginBottom: '15px' }}>
                   <IonLabel position="stacked" style={{ color: '#666' }}>Categoría *</IonLabel>
-                  <IonInput placeholder="Ej: Programación" value={categoria} onIonInput={(e: any) => setCategoria(e.target.value)} />
+                  <IonInput placeholder="Ej: Programación" value={categoria} onIonInput={(e) => setCategoria(e.detail.value ?? '')} />
                 </IonItem>
               </IonCol>
               <IonCol size="12" sizeMd="6">
                 <IonItem lines="none" style={{ border: '1px solid #ddd', borderRadius: '8px', marginBottom: '15px' }}>
                   <IonLabel position="stacked" style={{ color: '#666' }}>Modalidad</IonLabel>
-                  <IonInput placeholder="Ej: Online" value={modalidad} onIonInput={(e: any) => setModalidad(e.target.value)} />
+                  <IonInput placeholder="Ej: Online" value={modalidad} onIonInput={(e) => setModalidad(e.detail.value ?? '')} />
                 </IonItem>
               </IonCol>
             </IonRow>
@@ -132,7 +143,8 @@ const CrearPublicacion: React.FC = () => {
             <IonTextarea 
               rows={4} 
               placeholder={tipo === 'busco' ? "Describe qué necesitas aprender..." : "Describe qué aprenderán tus estudiantes..."}
-              value={descripcion} onIonInput={(e: any) => setDescripcion(e.target.value)} 
+              value={descripcion} 
+              onIonInput={(e) => setDescripcion(e.detail.value ?? '')} 
             />
           </IonItem>
 
@@ -142,7 +154,7 @@ const CrearPublicacion: React.FC = () => {
                 <IonCol size="12" sizeMd="6" style={{ paddingRight: '10px' }}>
                   <IonItem lines="none" style={{ border: '1px solid #ddd', borderRadius: '8px', marginBottom: '15px' }}>
                     <IonLabel position="stacked" style={{ color: '#666' }}>Duración</IonLabel>
-                    <IonInput placeholder="Ej: 60 minutos" value={duracion} onIonInput={(e: any) => setDuracion(e.target.value)} />
+                    <IonInput placeholder="Ej: 60 minutos" value={duracion} onIonInput={(e) => setDuracion(e.detail.value ?? '')} />
                   </IonItem>
                 </IonCol>
               )}
@@ -150,7 +162,7 @@ const CrearPublicacion: React.FC = () => {
               <IonCol size="12" sizeMd={tipo === 'busco' ? "12" : "6"}>
                 <IonItem lines="none" style={{ border: '1px solid #ddd', borderRadius: '8px', marginBottom: '15px' }}>
                   <IonLabel position="stacked" style={{ color: '#666' }}>Puntos {tipo === 'busco' ? 'a ofrecer' : 'a cobrar'} *</IonLabel>
-                  <IonInput type="number" placeholder="Ej: 15" value={puntos} onIonInput={(e: any) => setPuntos(e.target.value)} />
+                  <IonInput type="number" placeholder="Ej: 15" value={puntos} onIonInput={(e) => setPuntos(e.detail.value ?? '')} />
                 </IonItem>
               </IonCol>
 
@@ -158,7 +170,7 @@ const CrearPublicacion: React.FC = () => {
                 <IonCol size="12">
                   <IonItem lines="none" style={{ border: '1px solid #ddd', borderRadius: '8px', marginBottom: '15px' }}>
                     <IonLabel position="stacked" style={{ color: '#666' }}>Cupos disponibles *</IonLabel>
-                    <IonInput type="number" placeholder="Ej: 5" value={cupos} onIonInput={(e: any) => setCupos(e.target.value)} />
+                    <IonInput type="number" placeholder="Ej: 5" value={cupos} onIonInput={(e) => setCupos(e.detail.value ?? '')} />
                   </IonItem>
                 </IonCol>
               )}
