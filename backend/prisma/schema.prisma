@@ -9,33 +9,68 @@ datasource db {
 
 // 1. Entidad: Usuarios
 model Usuario {
-  id            Int       @id @default(autoincrement())
-  nombre        String
-  correo        String    @unique
-  contrasena    String
-  saldo         Int       @default(50)
-  rol           String    @default("usuario")
-  
-  // Nuevos campos para el Perfil
-  descripcion   String?   
-  fotoUrl       String?   
+  id                  Int           @id @default(autoincrement())
+  nombre              String
+  correo              String        @unique
+  contrasena          String
+  saldo               Int           @default(50)
+  rol                 String        @default("usuario")
+  descripcion         String?
+  fotoUrl             String?
+  fechaCreacion       DateTime      @default(now())
 
-  ofertas       Oferta[]  @relation("OfertasCreadas")
-  fechaCreacion DateTime  @default(now())
+  ofertas             Oferta[]      @relation("OfertasCreadas")
+  propuestasEnviadas  Propuesta[]   @relation("PropuestasEnviadas")
+  transacciones       Transaccion[]
+  mensajesEnviados    Mensaje[]     @relation("MensajesEnviados")
+  mensajesRecibidos   Mensaje[]     @relation("MensajesRecibidos")
 }
 
-// 2. Entidad: Ofertas (Clases, Salas, etc.)
+// 2. Entidad: Ofertas
 model Oferta {
-  id            Int       @id @default(autoincrement())
+  id            Int         @id @default(autoincrement())
   titulo        String
   descripcion   String
   categoria     String
   puntos        Int
-  tipo          String    
-  
-  // Llave foránea y relación
+  tipo          String
   creadorId     Int
-  creador       Usuario   @relation("OfertasCreadas", fields: [creadorId], references: [id], onDelete: Cascade)
-  
-  fechaCreacion DateTime  @default(now())
+  creador       Usuario     @relation("OfertasCreadas", fields: [creadorId], references: [id], onDelete: Cascade)
+  propuestas    Propuesta[]
+  cupoMaximo    Int?
+  fechaCreacion DateTime    @default(now())
+}
+
+// 3. Entidad: Propuestas / Inscripciones
+model Propuesta {
+  id            Int      @id @default(autoincrement())
+  estado        String   @default("pendiente") // pendiente, aceptada, rechazada, completada
+  mensaje       String?
+  ofertaId      Int
+  oferta        Oferta   @relation(fields: [ofertaId], references: [id], onDelete: Cascade)
+  solicitanteId Int
+  solicitante   Usuario  @relation("PropuestasEnviadas", fields: [solicitanteId], references: [id], onDelete: Cascade)
+  fechaCreacion DateTime @default(now())
+}
+
+// 4. Entidad: Transacciones (Wallet)
+model Transaccion {
+  id            Int      @id @default(autoincrement())
+  tipo          String   // ingreso, egreso
+  monto         Int
+  descripcion   String
+  usuarioId     Int
+  usuario       Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  fechaCreacion DateTime @default(now())
+}
+
+// 5. Entidad: Mensajes (Chats)
+model Mensaje {
+  id             Int      @id @default(autoincrement())
+  contenido      String
+  remitenteId    Int
+  remitente      Usuario  @relation("MensajesEnviados", fields: [remitenteId], references: [id], onDelete: Cascade)
+  destinatarioId Int
+  destinatario   Usuario  @relation("MensajesRecibidos", fields: [destinatarioId], references: [id], onDelete: Cascade)
+  fechaCreacion  DateTime @default(now())
 }
