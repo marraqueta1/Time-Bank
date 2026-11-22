@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent, 
   IonChip, IonLabel, IonCard, IonCardHeader, IonCardTitle, 
   IonCardSubtitle, IonCardContent, IonButton, IonBadge, IonSearchbar,
-  IonToast, useIonViewWillEnter
+  IonToast
 } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api'; 
@@ -17,7 +17,12 @@ const Feed: React.FC = () => {
   const [textoBusqueda, setTextoBusqueda] = useState('');
   
   const [ofertasReales, setOfertasReales] = useState<any[]>([]);
+  const [saldo, setSaldo] = useState<number>(0);
+  const [miId, setMiId] = useState<number | null>(null);
+  const [inscritasIds, setInscritasIds] = useState<number[]>([]);
   const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastColor, setToastColor] = useState<'success' | 'danger'>('success');
 
   const rolUsuario = authService.getRole(); 
 
@@ -26,7 +31,7 @@ const Feed: React.FC = () => {
     if (confirmar) {
       try {
         await api.delete(`/ofertas/${id}`);
-        cargarOfertas(); 
+        cargarDatos(); 
       } catch (error) {
         console.error(error);
         alert('Hubo un error al intentar borrar la publicación.');
@@ -34,18 +39,30 @@ const Feed: React.FC = () => {
     }
   };
 
-  const cargarOfertas = async () => {
+  const cargarDatos = async () => {
     try {
-      const response = await api.get('/ofertas');
-      setOfertasReales(response.data);
+      const [resOfertas, resPerfil, resPropuestas] = await Promise.all([
+        api.get('/ofertas'),
+        api.get('/usuarios/perfil'),
+        api.get('/propuestas')
+      ]);
+      const userId = resPerfil.data.id;
+      setMiId(userId);
+      setSaldo(resPerfil.data.saldo ?? 0);
+      setOfertasReales(resOfertas.data);
+
+      const ids = (resPropuestas.data || [])
+        .filter((p: any) => p.solicitanteId === userId && p.estado !== 'cancelada' && p.estado !== 'rechazada')
+        .map((p: any) => p.ofertaId);
+      setInscritasIds(ids);
     } catch (error) {
       console.error(error);
     }
   };
 
-  useIonViewWillEnter(() => {
-    cargarOfertas();
-  });
+  useEffect(() => {
+    cargarDatos();
+  }, []);
 
   const ofertasFiltradas = ofertasReales.filter(oferta => {
     let pasaFiltroCategoria = true;
@@ -59,7 +76,6 @@ const Feed: React.FC = () => {
     if (textoBusqueda.trim() !== '') {
       const query = textoBusqueda.toLowerCase();
       const nombreAutor = oferta.creador?.nombre || '';
-      
       pasaFiltroTexto = 
         oferta.titulo.toLowerCase().includes(query) || 
         oferta.descripcion.toLowerCase().includes(query) ||
@@ -69,19 +85,29 @@ const Feed: React.FC = () => {
     return pasaFiltroCategoria && pasaFiltroTexto;
   });
 
-  const handleInscribirme = (oferta: any) => {
-    const guardadas = JSON.parse(localStorage.getItem('inscripciones') || '[]');
-    const yaInscrito = guardadas.find((item: any) => item.id === oferta.id);
-    
-    if (!yaInscrito) {
-      guardadas.push(oferta);
-      localStorage.setItem('inscripciones', JSON.stringify(guardadas));
+  const handleInscribirme = async (oferta: any) => {
+    if (oferta.creadorId === miId) {
+      setToastColor('danger');
+      setToastMessage('No puedes inscribirte a tu propia publicación.');
+      setShowToast(true);
+      return;
     }
 
-    setShowToast(true);
-    setTimeout(() => {
-      navigate('/app/perfil');
-    }, 1500); 
+    try {
+      await api.post('/propuestas', {
+        ofertaId: oferta.id,
+        mensaje: `Inscripción a: ${oferta.titulo}`
+      });
+      await cargarDatos();
+      window.dispatchEvent(new Event('proposalsChanged'));
+      setToastColor('success');
+      setToastMessage(`¡Te inscribiste a "${oferta.titulo}"! Puedes verla en Propuestas y en tu Perfil.`);
+      setShowToast(true);
+    } catch (error: any) {
+      setToastColor('danger');
+      setToastMessage(error.response?.data?.error || 'No se pudo completar la inscripción.');
+      setShowToast(true);
+    }
   };
 
   return (
@@ -90,7 +116,7 @@ const Feed: React.FC = () => {
         <IonToolbar>
           <IonTitle>Hola 👋</IonTitle>
           <IonBadge color="warning" slot="end" className="ion-margin-end" style={{ padding: '8px', color: '#000' }}>
-            50 pts
+            {saldo} pts
           </IonBadge>
         </IonToolbar>
       </IonHeader>
@@ -119,6 +145,10 @@ const Feed: React.FC = () => {
         {ofertasFiltradas.map(oferta => {
           const tipoVisual = oferta.tipo === '1-a-1' ? 'Profesor' : oferta.tipo === 'sala' ? 'Sala' : 'Busca';
           const nombreAutor = oferta.creador?.nombre || 'Usuario';
+          const yaInscrito = inscritasIds.includes(oferta.id);
+          const esMia = oferta.creadorId === miId;
+          const inscritos = oferta.inscritos ?? 0;
+          const estaLlena = oferta.tipo === 'sala' && oferta.cupoMaximo ? inscritos >= oferta.cupoMaximo : false;
 
           return (
             <IonCard key={oferta.id} style={{ borderRadius: '12px', margin: '16px 0', boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
@@ -144,14 +174,19 @@ const Feed: React.FC = () => {
               <IonCardContent>
                 <p style={{ margin: '8px 0', color: '#666' }}>{oferta.descripcion}</p>
                 
-                <div style={{ display: 'flex', gap: '15px', color: '#888', fontSize: '0.9rem', marginBottom: '15px' }}>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', color: '#888', fontSize: '0.9rem', marginBottom: '15px' }}>
                   <IonBadge color="light">{oferta.categoria}</IonBadge>
+                  {oferta.tipo === 'sala' && (
+                    <IonBadge color={estaLlena ? 'danger' : 'tertiary'}>
+                      👥 {inscritos}{oferta.cupoMaximo ? ` / ${oferta.cupoMaximo}` : ''} inscritos
+                    </IonBadge>
+                  )}
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #eee', paddingTop: '12px' }}>
                   <strong style={{ color: '#d97706', fontSize: '1.1rem' }}>{oferta.puntos} pts</strong>
                   
-                  <div style={{ display: 'flex', gap: '8px' }}>
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                     {rolUsuario === 'admin' && (
                       <IonButton size="small" color="danger" fill="clear" onClick={() => handleEliminar(oferta.id)}>
                         Borrar
@@ -159,30 +194,37 @@ const Feed: React.FC = () => {
                     )}
 
                     {oferta.tipo === 'sala' && (
-                      <IonButton 
-                        size="small" 
-                        fill="outline"
-                        onClick={() => navigate(`/app/offers/${oferta.id}`)}
-                      >
+                      <IonButton size="small" fill="outline" onClick={() => navigate(`/app/offers/${oferta.id}`)}>
                         Ver detalle
                       </IonButton>
                     )}
 
-                    <IonButton 
-                      size="small" 
-                      fill={oferta.tipo === 'sala' ? 'solid' : 'outline'}
-                      onClick={() => {
-                        if (oferta.tipo === 'sala') handleInscribirme(oferta);
-                        else if (oferta.tipo === 'busco') {
-                          
-                          const nombreContacto = nombreAutor.split(' ')[0].toLowerCase();
-                          navigate(`/app/chats?contacto=${nombreContacto}`);
-                        }
-                        else navigate(`/app/offers/${oferta.id}`);
-                      }}
-                    >
-                      {oferta.tipo === 'sala' ? 'Inscribirme' : oferta.tipo === 'busco' ? 'Contactar' : 'Ver detalle'}
-                    </IonButton>
+                    {oferta.tipo === 'sala' ? (
+                      <IonButton
+                        size="small"
+                        color={yaInscrito ? 'success' : estaLlena ? 'medium' : 'primary'}
+                        fill="solid"
+                        disabled={yaInscrito || esMia || estaLlena}
+                        onClick={() => handleInscribirme(oferta)}
+                      >
+                        {esMia ? 'Tu sala' : yaInscrito ? 'Inscrito ✓' : estaLlena ? 'Sala llena' : 'Inscribirme'}
+                      </IonButton>
+                    ) : (
+                      <IonButton 
+                        size="small" 
+                        fill="outline"
+                        disabled={esMia && oferta.tipo === 'busco'}
+                        onClick={() => {
+                          if (oferta.tipo === 'busco') {
+                            navigate(`/app/chats?contacto=${oferta.creadorId}`);
+                          } else {
+                            navigate(`/app/offers/${oferta.id}`);
+                          }
+                        }}
+                      >
+                        {oferta.tipo === 'busco' ? (esMia ? 'Tu publicación' : 'Contactar') : 'Ver detalle'}
+                      </IonButton>
+                    )}
                   </div>
                 </div>
               </IonCardContent>
@@ -199,9 +241,9 @@ const Feed: React.FC = () => {
         <IonToast
           isOpen={showToast}
           onDidDismiss={() => setShowToast(false)}
-          message="Inscripción realizada con éxito"
-          duration={1500}
-          color="success"
+          message={toastMessage}
+          duration={2500}
+          color={toastColor}
           position="bottom"
         />
       </IonContent>
